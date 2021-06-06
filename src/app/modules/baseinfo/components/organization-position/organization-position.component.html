@@ -1,0 +1,110 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">Organization Positions</h6>    
+</div>
+ 
+<div class="modal-body" style="font-size:12px">
+
+  <div class="col-md-12"  style="padding-top: 20px;">
+    <div class="row">     
+        <div class="col-md-4">
+          <div style="font-weight: 500">
+             Organization Chart
+          </div>
+          <br>
+          <div style="min-height: 500px; border-right: groove">
+            <kendo-treeview              
+              [nodes]="positions"
+              textField="title"
+              [(expandedKeys)]="expandedKeys"
+              [expandBy]="'title'" 
+              kendoTreeViewExpandable
+              kendoTreeViewSelectable  
+              kendoTreeViewFlatDataBinding
+              idField="id"
+              parentIdField="parentId"
+              (selectionChange)="handlePositionSelection($event)">
+           </kendo-treeview>
+        </div> 
+       </div>  
+       <div class="col-md-8">
+            <div>
+               <span style="font-weight: 500">" {{viewModel.discipline?.title}} " </span> Position Users
+            </div>
+            <br>
+            <div class="content">  
+                <kendo-grid 
+                    [data]="gridView"
+                    [pageSize]="state.take"
+                    [skip]="state.skip"
+                    [sort]="state.sort"
+                    [filter]="state.filter"
+                    [sortable]="true"
+                    [filterable]="true"  
+                    [kendoGridSelectBy]="'id'"
+                    [selectedKeys]="selectionRows"                   
+                    [scrollable]="'none'"
+                    [selectable]="{
+                      checkboxOnly: false,
+                      mode : 'single'
+                  }"     
+                  (dataStateChange)="dataStateChange($event)">
+                  <ng-template kendoGridToolbarTemplate position="top">
+                      <button *ngxPermissionsOnly="['assignOrganizationPosition']" (click)="assignRole()" class="k-button grid-Button">Assign</button>  
+                      <button *ngxPermissionsOnly="['assignOrganizationPosition']" (click)="edit()" class="k-button grid-Button">Edit</button>                    
+                      <button *ngxPermissionsOnly="['assignOrganizationPosition']" (click)="delete()" class="k-button grid-Button">Delete</button>
+                  </ng-template>
+                  <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+                  <kendo-grid-column headerClass="grid-header" field="user.title" title="User"></kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="discipline.title" title="Organization Role"></kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header"  field="position.title" title="Position"></kendo-grid-column>   
+                </kendo-grid>
+              </div>
+       </div> 
+    </div>
+  </div>
+
+<br>
+<br>
+<div class="row">    
+<div class="col-md-12">
+  <mat-accordion>
+   <mat-expansion-panel>
+     <mat-expansion-panel-header>
+       <mat-panel-title style="color: blue;">
+          All Organization Positions
+       </mat-panel-title>
+     </mat-expansion-panel-header>
+
+     <div class="content">  
+        <kendo-grid 
+        [data]="gridViewUser"
+        [pageSize]="stateUser.take"
+        [skip]="stateUser.skip"
+        [sort]="stateUser.sort"
+        [pageable]="{
+          buttonCount: 10,
+          info: true,
+          type: 'type',
+          pageSizes: true,
+          previousNext: true
+        }"
+        [filter]="stateUser.filter"
+        [sortable]="true"
+        [filterable]="true"                 
+        [scrollable]="'none'"  
+        (dataStateChange)="dataStateUserChange($event)">  
+        <ng-template kendoGridToolbarTemplate position="top">
+             <div class="rose-refresh-grid"> <i title="Refresh" (click)="getAllOrgPositions()" class="fa fa-refresh fa-fw"></i> </div>
+        </ng-template>   
+      <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+      <kendo-grid-column headerClass="grid-header" field="user.title" title="User"></kendo-grid-column>
+      <kendo-grid-column headerClass="grid-header" field="discipline.title" title="Discipline"></kendo-grid-column>
+      <kendo-grid-column headerClass="grid-header"  field="position.title" title="Position"></kendo-grid-column>   
+    </kendo-grid>
+     </div>
+    </mat-expansion-panel>    
+  </mat-accordion>
+ </div>
+</div>
+</div>

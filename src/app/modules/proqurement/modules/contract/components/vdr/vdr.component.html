@@ -1,0 +1,207 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">VDR Approval</h6>
+
+</div>
+
+
+  <div class="modal-body" style="font-size:12px" *ngIf="subject.getState() != undefined">
+    
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-4"> 
+        <span style="font-weight:bold">Document NO. : </span>  {{viewModel.vpis?.title}}
+       </div>
+       <div class="col-md-4"> 
+        <span style="font-weight:bold"> Discipline : </span> {{viewModel.discipline}}
+       </div>  
+       <div class="col-md-4"> 
+        <span style="font-weight:bold">Vendor : </span> {{viewModel.vendor}}
+       </div>
+    </div>
+    <div class="row"  style="padding-top: 10px;">
+      <div class="col-md-4"> 
+        <span style="font-weight:bold">Purpose Of Issue : </span> {{viewModel.purposeOfIssue}}
+       </div>
+       <div class="col-md-4"> 
+        <span style="font-weight:bold"> Revision : </span> {{viewModel.revision}}
+       </div>  
+    </div>
+    <div class="row"  style="padding-top: 10px;">
+      <div class="col-md-12">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title style="color: blue;">
+            Vendor Document Info.
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+    
+      <div class="content" *ngIf="viewModel.vendorOffer" >
+          <div class="row">
+              <div class="col-md-12">
+                <div>
+                  <label class="label"> Description</label>
+                </div>
+                 <div>
+                    <textarea readonly rows="3" cols="200" type="text"  [(ngModel)] ="viewModel.description" class="textarea-form-control"></textarea>                
+                 </div>                 
+              </div>   
+            </div>
+        <div class="row" style="padding-top: 10px;">
+          <div class="col-md-10" >
+            <div>
+              <label class="label"> File Direction</label>
+            </div>
+            <div>
+              <input readonly type="text" [value] ="viewModel.vendorOffer.fileDirection" class="rose-form-control">                  
+            </div>   
+          </div>
+          <div class="col-md-2">
+            <div>
+              <label class="label"> Deadline</label>
+            </div>
+           <div>
+              <input readonly type="text" [value] ="viewModel.vendorOffer.deadline | date" class="rose-form-control">                       
+            </div>
+           </div>
+        </div>
+        <div class="col-md-12" *ngIf="viewModel.vendorOffer.vendorAttachs">
+          <mat-list>
+              <h6 mat-subheader>Vendor File Attachs</h6>
+              <mat-divider style="padding-bottom: 10px;">       
+                </mat-divider>           
+           </mat-list>  
+           <span *ngFor="let file of viewModel.vendorOffer.vendorAttachs" style="padding-right: 30px;">
+              <a style="padding-right: 30px;" matLine [href]="getPath(file.path)" target="_blank" title="Download">{{file.fileName}}</a>
+            </span>  
+            <p *ngIf="viewModel.vendorOffer.vendorAttachs.length == 0"> No File Attach! </p>    
+        </div>
+      </div>
+      </mat-expansion-panel>
+    
+    </mat-accordion>
+    </div>
+    </div>
+
+  <div class="row"  style="padding-top: 10px;">
+  <div class="col-md-4" *ngIf="toExpertAccess()">        
+    <div  *ngxPermissionsOnly="['toExpertMrpVendorFlow']">
+      <label class="label">To Expert</label>
+    </div>
+    <div  *ngxPermissionsOnly="['toExpertMrpVendorFlow']">
+      <kendo-combobox
+      style="width:100%"
+      [data]="expertUsers"
+      [(ngModel)] ="viewModel.toExpert"
+      textField="name"
+      valueField="id"></kendo-combobox>   
+    </div>           
+   </div>  
+   <div class="col-md-5">
+     <div>
+       <br/>
+     </div>
+     <span *ngIf="toExpertAccess()" class="span-button">
+      <button class="btn btn-info" *ngxPermissionsOnly="['toExpertMrpVendorFlow']" (click)="toExpert()">To Expert</button>
+     </span>
+     <span *ngIf="idcAccess()" class="span-button">
+        <button mat-stroked-button *ngxPermissionsOnly="['idcMrpVendorFlow']" (click)="toIdc()"><a style="color: blue;">IDC Vendor Document</a></button>
+     </span> 
+    </div>
+  </div> 
+    
+    <div *ngIf="viewModel.vendorFlowStates != undefined && viewModel.vendorFlowStates.length > 0"> 
+        <mat-list>
+            <mat-list-item>Approval State Changes</mat-list-item>
+         <!--    <mat-divider>       
+            </mat-divider> -->
+          </mat-list> 
+
+     <div class="row" style="padding-top: 10px;">       
+      <div class="col-md-12">  
+        <approval-flow-log [systemType]="1" [approvalStates]="viewModel.vendorFlowStates"></approval-flow-log>
+      </div>
+     </div>
+    </div> 
+    
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12">
+        <div>
+          <label class="label"> Comment</label>
+        </div>
+         <div>
+            <textarea rows="3" cols="200" type="text"  [(ngModel)] ="viewModel.comment" class="textarea-form-control"></textarea>                
+         </div>                 
+      </div>   
+    </div>
+
+   <div class="row"  style="padding-top: 10px;"> 
+      <div class="col-md-12">       
+        <app-attach-file [attachFiles]="viewModel.vendorAttachs"
+          [uploadSaveUrl]="uploadSaveUrl" (attachFileChanged)="onAttachFileChanged($event)"></app-attach-file> 
+      </div>          
+   </div> 
+   </div>  
+
+
+<div class="modal-footer" *ngIf="subject.getState() != undefined">
+
+    <span *ngIf="pslRejectAccess()" class="span-button"><button class="btn btn-warning" *ngxPermissionsOnly="['rejectByPSLMrpVendorFlow']" (click)="rejectByPSL()">Reject</button></span>
+    <span *ngIf=" toPMAccess()" class="span-button"><button class="btn btn-success" *ngxPermissionsOnly="['toPMMrpVendorFlow']" (click)="toProjectManager()"> To Area Manager</button></span>
+    <span *ngIf="toPslAccess()" class="span-button"><button class="btn btn-success" *ngxPermissionsOnly="['toPSLMrpVendorFlow']" (click)="toPsl()"> To PSL</button></span>
+    <span *ngIf="pmAccess()" class="span-button"><button class="btn btn-success" *ngxPermissionsOnly="['approvedByPMMrpVendorFlow']" (click)="approvedByPM()"> Approve</button></span>
+    <span *ngIf="pmAccess()" class="span-button"><button class="btn btn-warning" *ngxPermissionsOnly="['rejectedByPMMrpVendorFlow']" (click)="rejectedByPM()"> Reject</button></span>
+    <span *ngIf="emAccess()" class="span-button"><button class="btn btn-success" *ngxPermissionsOnly="['approvedByEMMrpVendorFlow']" (click)="approvedByEM()"> Approve</button></span>
+    <span *ngIf="emAccess()" class="span-button"><button class="btn btn-warning" *ngxPermissionsOnly="['rejectedByEMMrpVendorFlow']" (click)="rejectedByEM()"> Reject</button></span>
+    <span *ngIf="toVendorAccess()" class="span-button"><button class="btn btn-success" *ngxPermissionsOnly="['postedToVendorMrpVendorFlow']" (click)="postedToVendor()"> Post To Vendor</button></span>
+</div>
+
+<div class="row"  style="padding-top: 10px;">
+  <div class="col-md-12">
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title style="color: blue;">
+        VDR IDC Distribution
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+  <div class="content" *ngIf="idc != undefined">
+    <div class="row" style="padding-top: 10px;">   
+      <div class="col-md-12"> 
+              <kendo-grid
+              [data]="gridView">
+
+            <kendo-grid-column headerClass="grid-header" field="discipline.title" title="Discipline" editable='false'></kendo-grid-column>
+            <kendo-grid-column headerClass="grid-header" field="responseStatus" title="Response Status">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{getStatusTitle(dataItem.responseStatus)}} 
+              </ng-template>         
+            </kendo-grid-column>
+            <kendo-grid-column headerClass="grid-header" field="dueDate" title="Due Date">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.dueDate | date}}
+              </ng-template>             
+            </kendo-grid-column>          
+            <kendo-grid-column headerClass="grid-header"field="comment"  title="Remark"></kendo-grid-column>
+            <kendo-grid-column headerClass="grid-header"field="fileName" title="Attached File">
+                <ng-template kendoGridCellTemplate let-dataItem>       
+                    <a [href]="getPath(dataItem.filePath)" target="_blank" title="Download">{{dataItem.fileName}}</a>                 
+                 </ng-template> 
+            </kendo-grid-column>
+            <kendo-grid-column  headerClass="grid-header"field="replyComment" title="Comment"></kendo-grid-column>
+            <kendo-grid-column  headerClass="grid-header"field="lastModifiedDate" title="Comment Date">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.lastModifiedDate | date}}
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column  headerClass="grid-header" field="modifiedUser" title="Comment By User"></kendo-grid-column>
+          </kendo-grid>
+        </div>
+      </div>
+  </div>
+  </mat-expansion-panel>
+
+</mat-accordion>
+</div>
+</div>

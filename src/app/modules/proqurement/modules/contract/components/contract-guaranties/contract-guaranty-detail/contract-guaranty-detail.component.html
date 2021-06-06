@@ -1,0 +1,80 @@
+
+ <app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+    <h6 class="modal-title" id="modal-basic-title">Contract Item Guaranty - {{data.contract.poNo}}</h6>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+    <div class="modal-body" style="font-size:12px">
+      <div class="row" style="padding-top: 10px;">
+        <div class="col-md-6">
+            <div>
+                <label class="label"><span style="color:red">*</span>Item</label>
+            </div>
+            <div>
+                <kendo-combobox
+                  #itemList
+                  style="width:100%"
+                  [data]="items"
+                  [(ngModel)] ="viewModel.contractItem"
+                  [filterable]="true"
+                  textField="title"
+                  valueField="id"></kendo-combobox>               
+            </div>
+        </div>
+        
+     <div class="col-md-6">
+            <div>
+              <label class="label"><span style="color:red">*</span> Guaranty Type</label>
+            </div>
+            <div>
+              <input type="text" [(ngModel)] ="viewModel.guarantyType" class="rose-form-control">                  
+            </div>
+     </div>
+    </div>
+    <div class="row"  style="padding-top: 10px;">
+         <div class="col-md-6">  
+            <div>
+                <label class="label">Start Date</label>
+            </div>
+            <div>            
+              <mat-form-field>
+                <input matInput [matDatepicker]="startDatePicker"  [(ngModel)] ="viewModel.startDate" >
+                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+            </mat-form-field>
+            </div>      
+          </div>
+          <div class="col-md-6">  
+            <div>
+              <label class="label">Expire Date</label>
+            </div>
+            <div>            
+            <mat-form-field>
+              <input matInput [matDatepicker]="endDatePicker"  [(ngModel)] ="viewModel.endDate" >
+              <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #endDatePicker></mat-datepicker>
+            </mat-form-field>
+           </div>      
+        </div>  
+      </div>     
+      <div class="row" style="padding-top: 5px">
+        <div class="col-md-12">
+          <div>
+              <label class="label">Description</label>
+          </div>
+          <div> 
+            <textarea rows="3" cols="200" type="text"  [(ngModel)] ="viewModel.description" class="textarea-form-control"></textarea>
+          </div>      
+         </div>
+      </div>     
+  </div>
+  
+  <div class="modal-footer">
+      <button *ngxPermissionsOnly="['saveContractGuaranty']"  class="btn btn-success" (click)="save()">Save</button>
+      <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+  </div>
+  
+  

@@ -1,0 +1,74 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">Discipline Plan Resources Report</h6>
+</div>
+
+<div class="modal-body" style="font-size:12px">
+
+<!--   <div class="row">
+    <div class="col-md-2">
+      <div>
+        <label class="label"><span style="color:red">*</span>From Date</label>
+      </div>
+      <div>
+        <mat-form-field>
+          <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="viewModel.startDate">
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label class="label"><span style="color:red">*</span>To Date</label>
+      </div>
+      <div>
+        <mat-form-field>
+          <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="viewModel.endDate">
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label><br></label>
+      </div>
+      <div>
+        <button class="btn btn-success" (click)="filter()">Filter</button>
+      </div>
+    </div>
+  </div> -->
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-12">
+      <div class="content">
+        <kendo-grid #grid [data]="gridView" [sortable]="true" [scrollable]="'none'" 
+          (dataStateChange)="dataStateChange($event)">
+          <ng-template kendoGridToolbarTemplate position="top">          
+            <span class="span-button"><button  (click)="openDisiplines()" class="k-button grid-Button">Set Discipline Resources</button></span>
+            <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+            <span class="rose-refresh-grid"> <i title="Refresh" (click)="filter()" class="fa fa-refresh fa-fw"></i> </span>
+          </ng-template>
+          <kendo-grid-column headerClass="grid-header" [width]="220" field="discipline" title="Discipline">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header"
+          *ngFor="let column of columns"
+          field="{{column.field}}"
+          title="{{column.title}}"
+        ></kendo-grid-column>
+         <!--  <kendo-grid-column headerClass="grid-header" [width]="200" field="discipline" title="Discipline">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="200" field="planManHaur" title="Plan Time">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="200" field="actualTaskTime" title="Actual Task Time">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="200" field="actualActivityTime" title="Actual Activity Time">
+          </kendo-grid-column>-->
+           <kendo-grid-column headerClass="grid-header" [width]="180" field="availableResource" title="Resources per Month">
+          </kendo-grid-column> 
+          <kendo-grid-excel fileName="DisciplinePlanResources.xlsx"></kendo-grid-excel>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

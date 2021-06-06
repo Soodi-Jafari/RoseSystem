@@ -1,0 +1,14 @@
+.level0 .codeColumn { background-color: #ffe6cc; }
+.level1 .codeColumn { background-color: #eeccff; }
+.level2 .codeColumn { background-color: #ccffb3; }
+.level3 .codeColumn { background-color: #00b300; }
+.level4 .codeColumn { background-color: #db70b8; }
+.level5 .codeColumn { background-color: #99ffff; }  
+.level6 .codeColumn { background-color: #ccd9ff; }
+.level7 .codeColumn { background-color: #ffcce0; }
+
+/* .k-grid tbody td {
+    white-space: nowrap;
+    line-height: 20px;
+    padding: 8px 12px;
+} */

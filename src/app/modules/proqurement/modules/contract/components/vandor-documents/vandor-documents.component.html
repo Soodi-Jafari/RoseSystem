@@ -1,0 +1,74 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>Vendor Documents (VDR)</h6>
+</div>
+
+<div class="content" style="font-size:12px">  
+
+      <div class="row" style="padding-top: 10px;">   
+        <div class="col-md-12">
+          <div class="content">  
+              <kendo-grid #grid
+                  [data]="gridView"   
+                  [sort]="state.sort"
+                  [sortable]="true"
+                  [scrollable]="'none'"
+                  [filter]="state.filter"
+                  [filterable]="true"  
+                  [groupable]="true"
+                  [group]="state.group"
+                  (dataStateChange)="dataStateChange($event)">        
+                <ng-template kendoGridToolbarTemplate position="top">
+                    <div class="rose-refresh-grid"> <i title="Refresh" (click)="getVdrs()" class="fa fa-refresh fa-fw"></i> </div>
+                </ng-template>
+                <kendo-grid-column  [width]="80" *ngxPermissionsOnly="['viewVendorTransmittalDoc']"  headerClass="grid-header">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                          <button (click)="viewVdr(dataItem)" class="k-button">View</button>
+                      </ng-template>
+                </kendo-grid-column>  
+                <kendo-grid-column  headerClass="grid-header"field="discipline" [width]="120" title="Discipline">
+                  <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="state.group"
+                    let-aggregates="aggregates">
+                    <p style="color:darkblue">  {{value}} - ({{aggregates["discipline"].count}})</p>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column  headerClass="grid-header"field="vendor" [width]="110" title="Vendor"></kendo-grid-column>
+                <kendo-grid-column  headerClass="grid-header"field="vpis.title" [width]="200" title="Document No.">
+                  <ng-template kendoGridCellTemplate let-dataItem>       
+                    <a  href="/home/procurement/vdr/{{dataItem.id}}" target="_blank">{{dataItem.vpis.title}}</a>
+                  </ng-template> 
+                </kendo-grid-column>
+                <kendo-grid-column  headerClass="grid-header"field="vpis.name" title="Document Title"></kendo-grid-column>
+                <kendo-grid-column headerClass="grid-header" filter="date" format="MM/dd/yyyy" field="creationDate" [width]="100" title="Creation Date">
+                    <ng-template kendoGridCellTemplate let-dataItem>       
+                        <span>
+                                {{dataItem.creationDate | date}}
+                        </span>
+                    </ng-template>
+                </kendo-grid-column>             
+                <kendo-grid-column headerClass="grid-header" field="purposeOfIssue" [width]="100" title="Purpose Of Issue">
+               </kendo-grid-column>              
+                <kendo-grid-column headerClass="grid-header" field="currentState" [width]="150" title="Current State">
+                  <ng-template kendoGridCellTemplate let-dataItem>       
+                      <span>
+                              {{getStateTitle(dataItem.currentState)}}
+                      </span>
+                  </ng-template>
+                  <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="state.group"
+                     let-aggregates="aggregates">
+                    <p style="color:darkblue"> {{getStateTitle(value)}} - ({{aggregates["currentState"].count}})</p>
+                  </ng-template>
+                 </kendo-grid-column>
+                 <kendo-grid-column headerClass="grid-header" filter="date" [width]="100" format="MM/dd/yyyy" field="deadline" title="Deadline">
+                  <ng-template kendoGridCellTemplate let-dataItem>       
+                      <span>
+                              {{dataItem.deadline | date}}
+                      </span>
+                  </ng-template>
+              </kendo-grid-column>  
+              </kendo-grid>
+            </div>
+        </div>
+      </div>
+
+  </div>

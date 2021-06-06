@@ -1,0 +1,51 @@
+
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>PCT Conditions</h6>
+</div>
+<div class="content" style="font-size:12px"> 
+      <kendo-grid #grid
+          [data]="gridView"   
+          [sort]="state.sort"
+          [sortable]="true"
+          [scrollable]="'none'"
+          [filter]="state.filter"
+          [filterable]="true"  
+          [groupable]="true"
+          [group]="state.group"
+          [kendoGridSelectBy]="'id'"
+          [selectedKeys]="selectionRows" 
+          [selectable]="{
+            checkboxOnly: false,
+            mode : 'single'
+          }"     
+          (dataStateChange)="dataStateChange($event)">        
+        <ng-template kendoGridToolbarTemplate position="top">
+            <button *ngxPermissionsOnly="['newPctLevel']" (click)="new()" class="k-button grid-Button">Add PCT</button>
+            <button *ngxPermissionsOnly="['editPctLevel']" (click)="edit()" class="k-button grid-Button">Edit PCT</button>
+            <button *ngxPermissionsOnly="['deletePctLevel']" (click)="delete()" class="k-button grid-Button">Delete PCT</button>
+
+            <div class="rose-refresh-grid"> <i title="Refresh" (click)="getPCTs()" class="fa fa-refresh fa-fw"></i> </div>
+        </ng-template> 
+        <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+        <kendo-grid-column  headerClass="grid-header" [width]="150" field="project.title" title="Project">
+          <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="state.group">
+            <p style="color:darkblue">  {{value}}</p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [width]="150" field="customer.title" title="Customer">
+          <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="state.group">
+            <p style="color:darkblue">  {{value}}</p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [width]="150" field="documentClass" title="Class">
+          <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="state.group">
+            <p style="color:darkblue">  {{value}}</p>
+          </ng-template>
+        </kendo-grid-column> 
+        <kendo-grid-column  headerClass="grid-header" [width]="170" field="purposeOfIssue.title" title="Purpose Of Issue"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" width="80" field="pct" title="PCT">
+        </kendo-grid-column>
+                       
+      </kendo-grid>
+      </div>

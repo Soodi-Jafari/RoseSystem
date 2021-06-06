@@ -1,0 +1,65 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>Contracts</h6>
+ </div>
+<div class="content">  
+  <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [filterable]="true"  
+      [kendoGridSelectBy]="'id'"
+      [selectedKeys]="selectionRows" 
+      [pageable]="{
+        buttonCount: 10,
+        info: true,
+        type: 'type',
+        pageSizes: true,
+        previousNext: true
+      }"
+      [scrollable]="'none'"
+      [selectable]="{
+        checkboxOnly: false,
+        mode : 'single'
+    }"     
+      [groupable]="true"
+      [group]="state.group"
+      (dataStateChange)="dataStateChange($event)"
+    >
+    <ng-template kendoGridToolbarTemplate position="top">
+      <button *ngxPermissionsOnly="['newContract']" (click)="new()" class="k-button grid-Button">Add Contract</button>
+      <button *ngxPermissionsOnly="['editContract']" (click)="edit()" class="k-button grid-Button">Contract Info</button> 
+      <button *ngxPermissionsOnly="['deleteContract']" (click)="delete()" class="k-button grid-Button">Delete Contract</button> 
+      <button *ngxPermissionsOnly="['viewContractItem']" (click)="openItems()" class="k-button grid-Button">Contracts Items</button>
+      <button *ngxPermissionsOnly="['viewContractGuaranty']" (click)="openGuaranties()" class="k-button grid-Button">Guaranties</button> 
+      <button *ngxPermissionsOnly="['viewContractTermPayment']" (click)="openTermPayments()" class="k-button grid-Button">Term of Payments</button>   
+      <button *ngxPermissionsOnly="['viewVpis']" (click)="openVPIS()" class="k-button grid-Button">VPIS</button>   
+      <button *ngxPermissionsOnly="['viewVendorTransmittal']" (click)="openTransmittal()" class="k-button grid-Button">Vendor Transmittal </button>   
+      <span class="rose-refresh-grid"> <i title="Refresh" (click)="getContracts()" class="fa fa-refresh fa-fw"></i> </span>
+    </ng-template>
+    <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+    <kendo-grid-column headerClass="grid-header" field="discipline" title="Descipline"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="mrpVendorTitle" title="Vendor"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="poNo" title="PO NO"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header"  filter="date" format="MM/dd/yyyy" field="poDate" title="PO Date">
+      <ng-template kendoGridCellTemplate let-dataItem>       
+        <span>
+                {{dataItem.poDate | date}}
+        </span>
+    </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="subject" title="Equipment"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="basePrice" title="Price(Rial)">
+        <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{dataItem.basePrice | commaSeperated}}
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="currencyPrice" title="Price(Curr.)"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="currencyUnit.title" title="Currency Unit"></kendo-grid-column>
+  </kendo-grid>
+</div>

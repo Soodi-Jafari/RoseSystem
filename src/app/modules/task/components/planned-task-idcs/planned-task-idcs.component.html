@@ -1,0 +1,68 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>Document IDCs</h6>
+</div>
+
+<div class="content" style="font-size:12px">  
+   
+    <div class="row" style="padding-top: 10px;">   
+      <div class="col-md-12">
+          <div class="content">  
+              <kendo-grid #grid
+                  [data]="gridView"  
+                  [sortable]="true"
+                  [filter]="state.filter"
+                  [filterable]="true"  
+                  [scrollable]="'none'"
+                  [groupable]="true"
+                  [group]="state.group"
+                  [navigable]="true"
+                  (dataStateChange)="dataStateChange($event)">        
+
+              <ng-template kendoGridToolbarTemplate position="top">
+                    <div class="rose-refresh-grid"> <i title="Refresh" (click)="getTaskIdcs()" class="fa fa-refresh fa-fw"></i> </div>
+              </ng-template>
+              <kendo-grid-column  [width]="80" *ngxPermissionsOnly="['idcMrpVendorFlow']"  headerClass="grid-header">
+                    <ng-template kendoGridCellTemplate let-dataItem>       
+                        <button (click)="viewIdc(dataItem)" class="k-button">View</button>
+                    </ng-template>
+              </kendo-grid-column>  
+              <kendo-grid-column  headerClass="grid-header"field="desciplineName" title="Discipline">
+                <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="group"
+                   let-aggregates="aggregates">
+                   <p style="color:darkblue">  {{value}} - ({{aggregates["desciplineName"].count}})
+                </p>
+              </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column headerClass="grid-header" field="documentNo" title="Document No"></kendo-grid-column>    
+              <kendo-grid-column  headerClass="grid-header" field="creationDate"  filter="date" format="MM/dd/yyyy" title="Creation Date">
+                <ng-template kendoGridCellTemplate let-dataItem>       
+                  <span>
+                          {{dataItem.creationDate | date}}
+                  </span>
+                </ng-template>
+              </kendo-grid-column>
+              <kendo-grid-column headerClass="grid-header" field="creationUser" title="Created By"></kendo-grid-column>            
+              <kendo-grid-column headerClass="grid-header" field="status" title="status">
+              <ng-template kendoGridCellTemplate let-dataItem>       
+                  <span>
+                          {{dataItem.status == 1 ? "Wait on PSL's Comment" : "Completed"}}
+                  </span>
+              </ng-template>
+              <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="group"
+              let-aggregates="aggregates">
+              <p style="color:darkblue">   {{value== 1 ? "Wait on PSL's Comment" : "Completed"}} - ({{aggregates["status"].count}}) </p>
+              </ng-template>
+            </kendo-grid-column>    
+            <kendo-grid-column  [width]="100" headerClass="grid-header">
+              <ng-template kendoGridCellTemplate let-dataItem>       
+                  <button *ngIf="deletePermission(dataItem)" (click)="delete(dataItem)" class="k-button">Delete IDC</button>
+              </ng-template>
+            </kendo-grid-column>    
+            <div *kendoGridDetailTemplate="let dataItem">
+                <idc-disciplines [idcId]="dataItem.id"></idc-disciplines>
+              </div>    
+              </kendo-grid>
+            </div>
+       </div>
+      </div>

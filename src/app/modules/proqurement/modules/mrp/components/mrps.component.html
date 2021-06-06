@@ -1,0 +1,59 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6 *ngIf="mode == 'mrps'">MRPs</h6>
+  <h6 *ngIf="mode == 'preOrder'">Pre Order</h6>
+ </div>
+<div class="content">  
+  <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [filterable]="true"  
+      [kendoGridSelectBy]="'id'"
+      [selectedKeys]="selectionRows" 
+      [pageable]="{
+        buttonCount: 10,
+        info: true,
+        type: 'type',
+        pageSizes: true,
+        previousNext: true
+      }"
+      [scrollable]="'none'"
+      [selectable]="{
+        checkboxOnly: false,
+        mode : 'single'
+    }"     
+      [groupable]="true"
+      [group]="state.group"
+      (dataStateChange)="dataStateChange($event)"
+    >
+    <ng-template kendoGridToolbarTemplate position="top">
+      <span *ngIf="mode == 'mrps'" class="span-button"><button *ngxPermissionsOnly="['newMrp']" (click)="new()" class="k-button grid-Button">Add MRP</button></span>
+      <span *ngIf="mode == 'mrps'" class="span-button"> <button *ngxPermissionsOnly="['editMrp']" (click)="edit()" class="k-button grid-Button">Edit MRP</button> </span>
+      <span *ngIf="mode == 'mrps'" class="span-button"> <button *ngxPermissionsOnly="['deleteMrp']" (click)="delete()" class="k-button grid-Button">Delete MRP</button> </span>
+      
+      <span *ngIf="mode == 'mrps'" class="span-button"><button *ngxPermissionsOnly="['viewMrpItem']" (click)="openMrtItems()" class="k-button grid-Button">MRP Item Definition</button>  </span>
+      <span *ngIf="mode == 'mrps'" class="span-button"><button *ngxPermissionsOnly="['viewMrpDocument']" (click)="openMrpDocuments()" class="k-button grid-Button">Document / Attachment</button></span>
+      <span *ngIf="mode == 'preOrder'" class="span-button"><button *ngxPermissionsOnly="['viewMrpVendor']" (click)="openMrpVendors()" class="k-button grid-Button">MRP Vendor Definition</button>  </span>    
+      <span *ngIf="mode == 'preOrder'" class="span-button"> <button  *ngxPermissionsOnly="['viewMrpVendorFlow']" (click)="openMrpVendorFlows()" class="k-button grid-Button">Bidding</button></span>      
+      <span *ngIf="mode == 'preOrder'" class="span-button"> <button  *ngxPermissionsOnly="['viewTBE']" (click)="openTBE()" class="k-button grid-Button">TBE</button></span>      
+      <span *ngIf="mode == 'preOrder'" class="span-button"><button  *ngxPermissionsOnly="['viewCBE']" (click)="openCBE()" class="k-button grid-Button">CBE</button></span>
+      <span *ngIf="mode == 'preOrder'" class="span-button"> <button *ngxPermissionsOnly="['viewCBE']"  class="k-button grid-Button">Negotiation</button> </span>
+      <span class="rose-refresh-grid"> <i title="Refresh" (click)="getMRPs()" class="fa fa-refresh fa-fw"></i> </span>
+    </ng-template>
+    <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+    <kendo-grid-column headerClass="grid-header" field="mrpNo" title="MRP No."></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="title" title="Title"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="disciplineTitle" title="Discipline"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header"  filter="date" format="MM/dd/yyyy" field="creationDate" title="Creation Date">
+      <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{dataItem.creationDate | date}}
+            </span>
+        </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</div>

@@ -1,0 +1,63 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+  <h5 class="modal-title" id="modal-basic-title">Condition</h5>
+  <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+  <div class="modal-body" style="font-size:12px">
+    <div class="row" style="padding-top: 10px;">
+        <div class="col-md-6">
+            <div>
+                <label class="label"><span style="color:red">*</span> Feild</label>
+            </div>
+            <div> 
+                <select (change)="onConditionFeildChange($event.target.value)" [(ngModel)] ="viewModel.feild" class="rose-form-control"> 
+                    <!-- <option *ngFor="let p of conditionFeilds let i = index" [ngValue]="conditionFeilds[i].id">{{p.title}}</option>  -->                 
+                  <option value="1">  Document Status </option>
+                  <option value="2">  Document Type </option>
+                  <option value="3">  Revision </option>
+                </select>   
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div>
+                <label class="label"><span style="color:red">*</span> Value</label>
+            </div>
+            <div>
+                <input *ngIf="isValuList == false"  type="text" [(ngModel)] ="viewModel.value" class="rose-form-control">   
+                <div *ngIf="isValuList == true">
+                  <kendo-combobox
+                  #unitList
+                  style="width:100%"
+                  [data]="units"
+                  [(ngModel)] ="viewModel.lookupValue"
+                  [filterable]="true"
+                  textField="title"
+                  valueField="id"></kendo-combobox>   
+                </div>                  
+            </div>
+          </div>     
+    </div>
+
+  <!--   <div class="row"  style="padding-top: 10px;">
+      <div class="col-md-6">              
+          <div>
+              <label class="label"><span style="color:red">*</span> Oprand </label>
+          </div>
+          <div>
+              <select [(ngModel)] ="viewModel.conditionOprand" class="rose-form-control"> 
+                  <option *ngFor="let p of conditionOprands" [ngValue]="p.id">{{p.title}}</option> 
+              </select>   
+          </div>          
+      </div>           
+    </div> -->
+    
+  </div>
+
+<div class="modal-footer">
+    <button *ngxPermissionsOnly="['savePctLevel']" class="btn btn-success" (click)="save()">Save</button>
+    <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+</div>
+

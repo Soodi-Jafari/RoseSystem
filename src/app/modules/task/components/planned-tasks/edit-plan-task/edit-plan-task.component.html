@@ -1,0 +1,54 @@
+
+ <app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 5px">
+    <h6 class="modal-title" id="modal-basic-title">Edit Task</h6>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+    <div class="modal-body" style="font-size:12px">
+      <div class="row" style="padding-top: 5px;">
+        <div class="col-md-6">
+            <div>
+                <label class="label"> Progress Percent</label>
+            </div>
+            <div>
+                <input  type="number" [(ngModel)] ="viewModel.progressPercent" class="rose-form-control">              
+            </div>
+        </div>   
+      </div>   
+ 
+       <div class="row" style="padding-top: 5px;">       
+         <div class="col-md-6">
+            <div>
+              <label class="label">Start Date</label>
+            </div>
+            <div>
+              <mat-form-field>
+                <input  matInput [matDatepicker]="startDatePicker"  [(ngModel)] ="viewModel.actualStart" >
+                 <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                 <mat-datepicker #startDatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label class="label">Finish Date</label>
+            </div>
+            <div>
+              <mat-form-field>
+                <input  matInput [matDatepicker]="deadlineDatePicker"  [(ngModel)] ="viewModel.actualFinish" >
+                 <mat-datepicker-toggle matSuffix [for]="deadlineDatePicker"></mat-datepicker-toggle>
+                 <mat-datepicker #deadlineDatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>          
+       </div>
+     
+  </div>
+  
+  <div class="modal-footer">
+      <button  class="btn btn-success" (click)="save()">Save</button>
+      <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+  </div>

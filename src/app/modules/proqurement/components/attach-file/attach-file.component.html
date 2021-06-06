@@ -1,0 +1,47 @@
+  <kendo-upload  
+       [saveUrl]="uploadSaveUrl"
+       [restrictions]="myRestrictions"
+       [withCredentials]="false"
+       [showFileList]="false"
+       [disabled]="disabled"
+       (error)="errorEventHandler($event)"   
+       (success) = "successEventHandler($event)">
+  </kendo-upload> 
+
+ <kendo-grid
+     [data]="fileGridView"
+     [pageSize]="state.take"
+     [skip]="state.skip"
+     [sort]="state.sort"
+     [sortable]="true" 
+     [kendoGridSelectBy]="'id'"        
+     [pageable]="{
+       buttonCount: 5,
+       info: true,
+       type: 'type',
+       pageSizes: true,
+       previousNext: true
+     }"
+     [scrollable]="'none'"
+     (dataStateChange)="dataStateChange($event)"
+   >        
+   <kendo-grid-column headerClass="grid-header" field="fileName" title="FileName">
+     <ng-template kendoGridCellTemplate let-dataItem>       
+       <a [href]="getPath(dataItem)" target="_blank" title="Download">{{dataItem.fileName}}</a>                 
+
+    </ng-template> 
+   </kendo-grid-column>
+   <kendo-grid-column headerClass="grid-header"  field="fileSize" title="Size">
+     <ng-template kendoGridCellTemplate let-dataItem>       
+       <span>
+               {{fileSizeFormat(dataItem.fileSize)}}
+       </span>
+   </ng-template>
+  </kendo-grid-column>   
+   <kendo-grid-column headerClass="grid-header" *ngIf="!disabled">
+       <ng-template kendoGridCellTemplate let-dataItem>       
+           <button (click)="deleteFile(dataItem)" class="k-button grid-Button">Delete</button>
+     </ng-template>
+   </kendo-grid-column>      
+ </kendo-grid>
+

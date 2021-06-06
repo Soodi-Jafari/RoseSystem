@@ -1,0 +1,203 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+    <h6 class="modal-title" id="modal-basic-title">Inter Discipline Check</h6>
+</div>
+
+<div class="modal-body" style="font-size:12px" *ngIf="subject.getState() != undefined"> 
+  <div class="row" style="padding-top: 10px;" *ngIf="viewModel.entityType == 1 || viewModel.entityType == 2"> 
+    <div class="col-md-3"> 
+     <span style="font-weight:bold"> Discipline :  </span> {{viewModel.desciplineName}}
+    </div>
+     <div class="col-md-3"> 
+       <span style="font-weight:bold">  vendor :  </span> {{viewModel.vendor}}
+     </div>
+     <div class="col-md-3"> 
+       <span style="font-weight:bold">  Document NO. :  </span> {{viewModel.documentNo}}
+     </div>
+  </div>
+  <div class="row" style="padding-top: 10px;" *ngIf="viewModel.entityType == 6"> 
+    <div class="col-md-3"> 
+      <span style="font-weight:bold"> Discipline :  </span> {{viewModel.desciplineName}}
+    </div>
+    <div class="col-md-3"> 
+      <span style="font-weight:bold"> Document No :  </span> {{viewModel.documentNo}}
+    </div>
+    <div class="col-md-6"> 
+      <span style="font-weight:bold"> Document Title :  </span> {{viewModel.documentTitle}}
+     </div>    
+  </div>
+  <div  class="row" style="padding-top: 20px;">
+    <div class="col-md-10">
+      <div>
+        <label class="label"> File Direction : </label>
+      </div>
+      <div>
+        <input [readonly]="isEditMode" type="text" [(ngModel)] ="viewModel.fileDirection" class="rose-form-control">                  
+      </div>   
+    </div>   
+    <div class="col-md-2">
+      <div>
+        <label class="label"> Deadline </label>
+      </div>
+     <div>
+        <input readonly type="text" [value] ="viewModel.dueDate | date" class="rose-form-control">                       
+      </div>
+     </div>
+  </div>
+  <mat-list>
+    <mat-list-item>Attach Files</mat-list-item>
+    <mat-divider>       
+    </mat-divider>
+  </mat-list> 
+  <div class="row" style="padding-top: 10px;">   
+    <div class="col-md-12">       
+       <app-attach-file [attachFiles]="viewModel.fileAttachs"  [disabled]="isEditMode"
+         [uploadSaveUrl]="uploadSaveUrl" (attachFileChanged)="onAttachFileChanged($event)"></app-attach-file> 
+    </div>  
+   </div> 
+   <div class="row" style="padding-top: 10px;">   
+    <div class="col-md-12">       
+      <div>
+        <label class="label"> Description</label>
+      </div>
+      <div>
+        <textarea [readonly]="isEditMode" rows="3" cols="200" type="text"  [(ngModel)] ="viewModel.description" class="textarea-form-control"></textarea>                
+      </div>   
+    </div>  
+   </div> 
+   <div class="row" style="padding-top: 10px;">
+     <div class="col-md-12">   
+       <span *ngIf="!isEditMode" class="span-button"><button class="btn btn-info" *ngxPermissionsOnly="['sendVendorFlowIdc']" (click)="autoIDC()"> Auto IDC</button></span>
+     </div>
+   </div>
+   <div> 
+    <mat-list>
+        <mat-list-item>Distribution List</mat-list-item>
+        <mat-divider>       
+        </mat-divider>
+    </mat-list> 
+
+    <div class="row" style="padding-top: 10px;">   
+      <div class="col-md-12">
+          <div class="content">  
+              <kendo-grid #grid
+              [data]="gridView"
+              [kendoGridSelectBy]="'id'"
+              [selectedKeys]="selectionRows" 
+              scrollable="virtual"
+              [selectable]="{
+                checkboxOnly: true,
+                mode : 'multiple'
+                }"     
+           
+              (cellClick)="cellClickHandler($event)"
+              (cellClose)="cellCloseHandler($event)"                 
+              [navigable]="true">
+           
+            <kendo-grid-checkbox-column *ngIf="!isEditMode" headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+            <kendo-grid-column [width]="170" headerClass="grid-header" field="discipline.title" title="Discipline" editable='false'></kendo-grid-column>
+            <kendo-grid-column [width]="160" [editable]="!isEditMode" headerClass="grid-header" field="responseStatus" title="Response Status">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{getStatusTitle(dataItem.responseStatus)}} 
+              </ng-template>
+              <ng-template kendoGridEditTemplate
+                let-dataItem="dataItem"
+                let-column="column"
+                let-formGroup="formGroup">
+               <select  [formControl]="formGroup.get('responseStatus')"> 
+                <option *ngFor="let p of responseStatuses" [ngValue]="p.id">{{p.title}}</option> 
+               </select>                   
+             </ng-template>          
+            </kendo-grid-column>
+            <kendo-grid-column [width]="180" [editable]="!isEditMode" headerClass="grid-header" field="dueDate" title="Due Date">
+              <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.dueDate | date}}
+              </ng-template>
+              <ng-template kendoGridEditTemplate 
+                let-dataItem="dataItem"
+                let-column="column"
+                let-formGroup="formGroup">                
+             <!--    <kendo-datepicker [formControl]="formGroup.get('dueDate')">
+                </kendo-datepicker>  -->   
+                <input matInput [matDatepicker]="dueDatePicker" [formControl]="formGroup.get('dueDate')" >
+                <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #dueDatePicker></mat-datepicker>          
+              </ng-template>      
+            </kendo-grid-column>          
+            <kendo-grid-column [width]="300" [editable]="!isEditMode" headerClass="grid-header" field="comment"  title="Remark"></kendo-grid-column>
+            <kendo-grid-column [width]="200" *ngIf="isEditMode" editable='false'  headerClass="grid-header"field="fileName" title="Attached File">
+                <ng-template kendoGridCellTemplate let-dataItem>       
+                    <a [href]="getPath(dataItem.filePath)" target="_blank" title="Download">{{dataItem.fileName}}</a>                 
+                 </ng-template> 
+            </kendo-grid-column>
+            <kendo-grid-column [width]="350" *ngIf="isEditMode"  headerClass="grid-header"field="replyComment" editable='false' title="Comment"></kendo-grid-column>
+            <kendo-grid-column [width]="120" *ngIf="isEditMode"  headerClass="grid-header"field="lastModifiedDate" editable='false' title="Comment Date">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    {{dataItem.lastModifiedDate | date}}
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [width]="150" *ngIf="isEditMode"  headerClass="grid-header"field="modifiedUser" editable='false' title="Comment By User"></kendo-grid-column>
+          </kendo-grid>
+         </div>
+        </div>
+      </div>
+  </div>  
+
+  <div *ngIf="isEditMode && isInDisciplinList">
+    <mat-list>
+        <mat-list-item>Reply IDC</mat-list-item>
+        <mat-divider>       
+        </mat-divider>
+      </mat-list> 
+
+  <div class="row" style="padding-top: 10px;" *ngIf="userRoles != null && userRoles != undefined && userRoles.length > 1">   
+  
+          <div  class="col-md-2">
+            <label class="label"> Comment As Discipline  </label>
+          </div>
+          <div class="col-md-4">
+            <kendo-combobox
+            style="width:100%"
+            [data]="userRoles"
+            [(ngModel)]="currentDiscipRole"
+            textField="disciplineName"
+            valueField="disciplineId"
+            (valueChange)="disSelectionChange($event)"></kendo-combobox>            
+          </div>   
+  </div> 
+  <div class="row" style="padding-top: 10px;">   
+    <div class="col-md-12">       
+      <div>
+        <label class="label"> Comment</label>
+      </div>
+      <div>
+        <textarea rows="3" cols="200" type="text" [(ngModel)] ="replyViewModel.replyComment"  class="textarea-form-control"></textarea>                
+      </div>   
+    </div>  
+   </div> 
+   <div class="row" style="padding-top: 10px;">   
+      <div class="col-md-12">
+         <kendo-upload
+              [saveUrl]="uploadSaveUrl"
+              [restrictions]="myRestrictions"
+              [withCredentials]="false"
+              [multiple] ="false"
+              [showFileList]="false"            
+              (success) = "successEventHandler($event)">
+          </kendo-upload> 
+        
+      </div>
+      <div class="col-md-12" *ngIf ="replyViewModel.fileName !== undefined && replyViewModel.fileName !== null">
+        <div>Name: <a [href]="getPath(replyViewModel.filePath)" target="_blank" title="Download">{{replyViewModel.fileName}}</a> 
+          <span style="padding:5px;"> <button (click)="deleteFile()" class="k-button grid-Button">Delete File</button> </span></div>                        
+      </div>
+  </div>
+</div>
+<div class="modal-footer" *ngIf="subject.getState() != undefined">
+  <span *ngIf="!isEditMode" class="span-button"><button class="btn btn-success" *ngxPermissionsOnly="['sendVendorFlowIdc']" (click)="sendToPSL()"> Send IDC</button></span>
+  <span *ngIf="isEditMode && isInDisciplinList && !replyViewModel.isCompleted" class="span-button"><button class="btn btn-success" *ngxPermissionsOnly="['replyVendorFlowIdc']" (click)="replyComment()"> {{buttenText}}</button></span>
+  <!-- <span *ngIf="isEditMode && isOwner && viewModel.status != 2" class="span-button"><button class="btn btn-success" *ngxPermissionsOnly="['sendVendorFlowIdc']" (click)="completeIdc()"> Complete IDC</button></span> -->
+</div>
+</div>
+
+

@@ -1,0 +1,190 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">{{ pageTitle }}</h6>
+</div>
+
+<div class="modal-body" style="font-size:12px">
+
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-3">
+      <div>
+        <label class="label"> Requested User</label>
+      </div>
+      <div>
+        <input readonly type="text" [(ngModel)]="viewModel.ownerName" class="rose-form-control">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div>
+        <label class="label"><span style="color:red">* </span>Project</label>
+      </div>
+      <div *ngIf="isOwner == true">
+        <kendo-combobox #projectList [disabled]="!editable" style="width:100%" [data]="projects"
+          [(ngModel)]="viewModel.project" [filterable]="true" textField="title" valueField="id"></kendo-combobox>
+      </div>
+      <div *ngIf="isOwner == false">
+        <input readonly type="text" [(ngModel)]="viewModel.project.title" class="rose-form-control">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div>
+        <label class="label"><span style="color:red">* </span>Section</label>
+      </div>
+      <div *ngIf="isOwner == true">
+        <kendo-combobox #sectionLList [disabled]="!editable" style="width:100%" name="section" [data]="sections"
+          textField="title" valueField="id" [(ngModel)]="viewModel.organizationRole"></kendo-combobox>
+      </div>
+      <div *ngIf="isOwner == false">
+        <input readonly type="text" [(ngModel)]="viewModel.organizationRole.title" class="rose-form-control">
+      </div>
+    </div>
+    <div class="col-md-3" *ngIf="eventType == 7">
+      <div>
+        <label class="label"><span style="color:red">* </span> Vacation Type</label>
+      </div>
+      <div>
+        <select [disabled]="!editable" [(ngModel)]="viewModel.dailyVacationType" class="rose-form-control">
+          <option value="1">استحقاقی</option>
+          <option value="2">بدون حقوق</option>
+          <option value="3">استعلاجی</option>
+          <option value="4">توافقی</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3" *ngIf="eventType == 3">
+      <div>
+        <label class="label"><span style="color:red">* </span> Transport</label>
+      </div>
+      <div>
+        <select [disabled]="!editable" [(ngModel)]="viewModel.transportType" class="rose-form-control">
+          <option value="2">اتومبیل شخصی</option>
+          <option value="3">اتومبیل شرکت</option>
+          <option value="4">آژانس</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3" *ngIf="eventType == 4">
+      <div>
+        <label class="label"><span style="color:red">* </span> Transport</label>
+      </div>
+      <div>
+        <select [disabled]="!editable" [(ngModel)]="viewModel.transportType" class="rose-form-control">
+          <option value="1">هواپیما</option>
+          <option value="2">اتومبیل شخصی</option>
+          <option value="3">اتومبیل شرکت</option>
+          <option value="4">آژانس</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-3">
+      <div>
+        <label class="label" style="font-size: 14px;"><span style="color:red">* </span> {{viewModel.isAllDay == true ? 'Start' : 'Date'}}</label>
+      </div>
+      <div>
+        <dp-date-picker dir="ltr" [disabled]="!editable" [(ngModel)]="startDate" theme="dp-material"
+          [config]="datePickerConfig"></dp-date-picker>
+      </div>
+    </div>
+    <div class="col-md-3" *ngIf="viewModel.isAllDay == true">
+      <div>
+        <label class="label" style="font-size: 14px;"><span style="color:red">* </span> End</label>
+      </div>
+      <div>
+        <dp-date-picker dir="ltr" [disabled]="!editable" [(ngModel)]="endDate" theme="dp-material"
+          [config]="datePickerConfig"></dp-date-picker>
+      </div>
+    </div>
+    <div class="col-md-2" *ngIf="viewModel.isAllDay == false">
+      <div>
+        <label class="label" style="font-size: 14px;"><span style="color:red">* </span> Start Time</label>
+      </div>
+      <div>
+        <input [readonly]="!editable" type="text" [(ngModel)]="startTime" class="rose-form-control" style="font-size: 14px;"  placeholder="00:00">
+      </div>
+    </div>
+    <div class="col-md-2" *ngIf="viewModel.isAllDay == false">
+      <div>
+        <label class="label" style="font-size: 14px;"><span style="color:red">* </span> End Time</label>
+      </div>
+      <div>
+        <input [readonly]="!editable" type="text" [(ngModel)]="endTime" class="rose-form-control" style="font-size: 14px;" placeholder="00:00">
+      </div>
+    </div>
+   <!--  <div class="col-md-3">
+      <div>
+        <label class="label"> Duration</label>
+      </div>
+      <div>
+        <input readonly type="text" [(ngModel)]="viewModel.duration" class="rose-form-control">
+      </div>
+    </div> -->
+    <div class="col-md-3" *ngIf="isNew == false">
+      <div>
+        <label class="label"> Creation Date</label>
+      </div>
+      <div>
+        <input readonly type="text" [(ngModel)]="viewModel.creationJalaliDate" class="rose-form-control">
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-9">
+      <div>
+        <label class="label"><span *ngIf="eventType == 4 || eventType == 3" style="color:red">* </span> Description</label>
+      </div>
+      <div>
+        <input [readonly]="!editable" type="text" [(ngModel)]="viewModel.description" class="rose-form-control">
+      </div>
+    </div>
+  </div>
+  <div *ngIf="viewModel.eventStates.length > 0">
+    <mat-list>
+      <mat-list-item>Events State Changes</mat-list-item>
+      <mat-divider>
+      </mat-divider>
+    </mat-list>
+
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12">
+        <app-event-states-log [approvalStates]="viewModel.eventStates"></app-event-states-log>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top:10px;">
+    <mat-list style="padding-top: 10px;">
+      <mat-divider>
+      </mat-divider>
+    </mat-list>
+    <div class="col-md-12" *ngIf="approveAccess()">
+      <div>
+        <label class="label">Comment</label>
+      </div>
+      <div>
+        <input type="text" [(ngModel)]="viewModel.comment" class="rose-form-control">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-success" (click)="saveEvent()" *ngIf="saveAccess()">Save</button>
+  <button class="btn btn-success" (click)="changeState(true)" *ngIf="approveAccess()">Approve</button>
+  <button class="btn btn-warning" (click)="changeState(false)" *ngIf="approveAccess()">Reject</button>
+  <button *ngIf="isHRUser == true && viewModel.currentStatus == 4" (click)="changeState(true)"
+    class="btn btn-success">ثبت کارگزینی</button>
+  <button *ngIf="isHRUser == true && viewModel.currentStatus == 4"
+    (click)="changeState(false)" class="btn btn-success">قابل ثبت نمی باشد</button>
+  <button *ngIf="isHRUser == true && viewModel.currentStatus == 0 && viewModel.eventType == 7"
+    (click)="HRVacationCommented(1)" mat-stroked-button><span class="k-icon k-i-check"
+      style="color: green;"></span>مرخصی دارد</button>
+  <button *ngIf="isHRUser == true && viewModel.currentStatus == 0 && viewModel.eventType == 7"
+    (click)="HRVacationCommented(2)" mat-stroked-button><span class="k-icon k-i-close" style="color: red;"></span>مرخصی ندارد</button>
+  <button *ngIf="isHRUser == true && viewModel.currentStatus == 0 && viewModel.eventType == 7"
+    (click)="HRVacationCommented(3)" mat-stroked-button><span class="k-icon k-i-close"
+      style="color: red;"></span>توافقی</button>
+  <button mat-stroked-button (click)="closeEvent()">Cancel</button>
+</div>

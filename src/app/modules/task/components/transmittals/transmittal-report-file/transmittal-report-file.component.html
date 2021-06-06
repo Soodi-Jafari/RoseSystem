@@ -1,0 +1,127 @@
+<app-loading *ngIf="isLoading"></app-loading>
+   <div class="example-config">
+    <button kendo-button (click)="pdf.saveAs()">
+      Save As PDF...
+    </button>
+    <span style="padding-left: 15px;"><button type="button" class="k-button" (click)="excelexport.save()">Save As Excel</button></span>
+  </div>
+<kendo-pdf-export #pdf paperSize="A4" margin="1cm" [scale]="0.7" [fileName]="filename" [repeatHeaders]="true">
+
+<div class="col-md-12 transmittalPage" style="max-width: 750px;">
+  <table class="col-md-12">
+    <thead>
+      <tr>
+        <th  style="padding:0px;">
+        <div class="row trans-top">
+          <div class="col-md-3 trans-logo">
+            <img class="logo-img" src="{{project.recieverLogo}}">
+          </div>
+          <div class="col-md-6 trans-top-title">
+            <div class="trans-top-report-title">
+              <div class="trans-top-reportTitle">
+                  {{project.reportProjectTitle}}
+              </div>
+              <div class="trans-top-contractNo">
+                  {{project.reportContractNo}}
+              </div>
+            </div>
+            <div class="trans-top-doc">
+                  DOCUMENTS TRANSMITTAL 
+            </div>
+          </div>
+          <div class="col-md-3 trans-logo">
+            <img class="logo-img" src="{{project.senederLogo}}">
+          </div>         
+      </div>
+      
+        <div class="row trans-header">
+           <div class="col-md-6 trans-header-right">
+             <div class="row">
+               <span class="trans-header-label">Reciever :</span> <span class="trans-header-text">{{transmittal.customer?.title}}</span>
+             </div>
+             <div class="row">
+              <span class="trans-header-label">Attention :</span> <span class="trans-header-text">{{transmittal.customer?.name}}</span>
+            </div>
+            <div class="row">
+              <span class="trans-header-label">CC :</span> <span class="trans-header-text"></span>
+            </div>
+           </div>
+           <div class="col-md-6">
+            <div class="row">
+              <span class="trans-header-label">Sender :</span> <span class="trans-header-text">ROSEMOND</span>
+            </div>
+            <div class="row">
+             <span class="trans-header-label">Transmittal No :</span> <span class="trans-header-text">{{transmittal.transmittalNo}}</span>
+           </div>
+           <div class="row">
+             <span class="trans-header-label">Transmittal Date :</span> <span class="trans-header-text">{{transmittal.transmittalDate | date}}</span>
+           </div>
+          </div>
+        </div>
+        
+          <div class="row trans-doc-header">
+              <span class="trans-doc-header-label" style="width:4%;"> No </span>
+              <span class="trans-doc-header-label" style="width:23%;"> Document No </span>
+              <span class="trans-doc-header-label" style="width:6%;"> Rev </span>
+              <span class="trans-doc-header-label" style="width:46%;"> Document Title </span>
+              <span class="trans-doc-header-label" style="width:6%;"> Sheet No </span>
+              <span class="trans-doc-header-label" style="width:6%;"> Page Size </span>
+              <span class="trans-doc-header-label" style="width:9%; border-right: none;"> Purpose of Issue </span>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  *ngFor="let item of transmittal.transmittalDocuments; let idx = index">
+      <td  class="row trans-doc-item" style="padding:0px;">
+       <!--  <div class="trans-doc"> -->
+         <!--  <div> -->
+            <span class="trans-doc-header-label" style="width:4%;"> {{idx + 1}}  </span>
+            <span class="trans-doc-header-label" style="width:23%;">{{item.documentNo}} </span>
+            <span class="trans-doc-header-label" style="width:6%;"> {{item.revision}} </span>
+            <span class="trans-doc-header-label" style="width:46%;padding-right:25px;"> {{item.documentTitle}} </span>
+            <span class="trans-doc-header-label" style="width:6%;"> {{item.sheetNo}} </span>
+            <span class="trans-doc-header-label" style="width:6%;"> {{getTransmittalPageType(item.pageType)}} </span>
+            <span class="trans-doc-header-label" style="width:9%; border-right: none;"> {{item.purposeOfIssue.title}} </span>
+          <!-- </div> -->
+        <!-- </div> -->
+    </td>
+    </tr>
+  </tbody>
+</table>
+
+  <div class="row trans-footer-info">
+        <span>IFC : Issue For Comment</span>  <span>IFA : Issue For Approval</span>
+        <span>AFC : Approve For Cunstruction</span> <span>IFI : Issue For Information</span>
+        <span>AFD : Approved For Detail Design</span>
+  </div>
+  <div class="row trans-footer-comment">
+    <span>Note / Comment : </span> 
+  </div>
+  <div class="row trans-footer-comment">
+    <div class="col-md-2">Checked By DCC : </div>
+    <div class="col-md-10">{{transmittal.description}}</div>
+  </div>
+  <div class="row trans-footer-comment sender">
+    <span>Sender By : </span> <span>Sender Name: {{senderName}} </span> <span>Sender Position: Project Engineer Manager </span>
+    <span> Date : </span>  <span> Signature : </span>
+</div>
+<div class="row trans-footer-reciever">
+  <span class="label">Acknowledge Recieved By : </span>  <span class="title">Name: </span>   <span  class="title">Date : </span> 
+</div>
+</div>
+
+</kendo-pdf-export>
+
+
+
+<kendo-excelexport [data]="excellData"  [collapsible]="true" [fileName]="filenameExcel" #excelexport>
+  <kendo-excelexport-column-group [title]="excellHeader" [headerCellOptions]="{ textAlign: 'center', background: '#666699', fontSize: '15' }">
+  <kendo-excelexport-column field="documentNo" title="Document No" [width]="250"></kendo-excelexport-column>
+ <kendo-excelexport-column field="revision" title="Rev" [width]="100"></kendo-excelexport-column>
+ <kendo-excelexport-column field="documentTitle" title="Document Title" [width]="400"></kendo-excelexport-column> 
+ <kendo-excelexport-column field="sheetNo" title="Sheet No" [width]="100"></kendo-excelexport-column>
+ <kendo-excelexport-column field="pageType" title="Page Size" [width]="100"></kendo-excelexport-column>
+ <kendo-excelexport-column field="purposeOfIssue" title="Purpose of Issue" [width]="150"></kendo-excelexport-column>
+</kendo-excelexport-column-group>
+</kendo-excelexport>

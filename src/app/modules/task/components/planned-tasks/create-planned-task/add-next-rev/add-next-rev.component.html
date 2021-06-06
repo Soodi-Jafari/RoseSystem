@@ -1,0 +1,91 @@
+
+ <app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 5px">
+    <h6 class="modal-title" id="modal-basic-title">Add New Revision Task</h6>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+    <div class="modal-body" style="font-size:12px">
+      <div class="row" style="padding-top: 5px;">
+        <div class="col-md-6">
+            <div>
+                <label class="label"><span style="color:red">*</span> Documnet No. </label>
+            </div>
+            <div>
+                <input readonly type="text" [(ngModel)] ="viewModel.documentNo" class="rose-form-control">              
+            </div>
+        </div>        
+        <div class="col-md-3">
+            <div>
+                <label class="label"><span style="color:red">*</span>Revision</label>
+            </div>
+            <div>
+              <input type="text" [(ngModel)] ="viewModel.revision" class="rose-form-control">                           
+            </div>
+        </div>
+        <div class="col-md-3">
+          <div>
+            <label class="label"><span style="color:red">*</span>Estimated Time</label>
+          </div>
+          <div>
+            <input type="text" [(ngModel)]="viewModel.estimateManHour" class="rose-form-control">
+          </div>
+        </div>
+      </div>    
+      <div class="row"  style="padding-top: 5px;">
+          <div class="col-md-12">
+            <div>
+                <label class="label"><span style="color:red">*</span>Document Title</label>
+            </div>
+            <div> 
+                <input readonly type="text" [(ngModel)] ="viewModel.documentTitle" class="rose-form-control">     
+            </div>      
+          </div>
+       </div>
+       <div class="row" style="padding-top: 5px;">       
+         <div class="col-md-6">
+            <div>
+              <label class="label"><span style="color:red">*</span> Start Date</label>
+            </div>
+            <div>
+              <mat-form-field>
+                <input  matInput [matDatepicker]="startDatePicker"  [(ngModel)] ="viewModel.actualStart" >
+                 <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                 <mat-datepicker #startDatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div>
+              <label class="label"><span style="color:red">*</span> Due Date</label>
+            </div>
+            <div>
+              <mat-form-field>
+                <input  matInput [matDatepicker]="deadlineDatePicker"  [(ngModel)] ="viewModel.dueDate" >
+                 <mat-datepicker-toggle matSuffix [for]="deadlineDatePicker"></mat-datepicker-toggle>
+                 <mat-datepicker #deadlineDatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>          
+       </div>
+       <div class="row" style="padding-top: 5px;">
+        <div class="col-md-6">
+          <div>
+            <label class="label">Priority</label>
+          </div>
+          <div>
+              <select [(ngModel)] ="viewModel.priority" class="rose-form-control"> 
+                  <option *ngFor="let p of priorities" [ngValue]="p">{{p.title}}</option> 
+              </select>  
+          </div>
+      </div>
+      </div>
+  </div>
+  
+  <div class="modal-footer">
+      <button class="btn btn-success" *ngIf="!isManager" (click)="save(1)">To Approval</button>
+      <button  class="btn btn-info" *ngIf="!isManager" (click)="save(2)">To IDC</button>
+      <button  class="btn btn-info" *ngIf="isManager"  (click)="save(3)">Save</button>
+  </div>

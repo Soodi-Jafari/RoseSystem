@@ -1,0 +1,24 @@
+<div>
+  <h6>Task Cartable</h6>
+</div>
+<div class="content" style="font-size:12px"> 
+  <mat-tab-group>
+    <mat-tab >
+        <ng-template mat-tab-label> 
+           Planned Tasks ({{ptCount}})
+        </ng-template>
+        <div class="col-md-12" style="padding-top: 10px;" *ngIf="this.subject.getState() != undefined">   
+           <app-planned-task-cartable [project] = "this.subject.getState()" 
+                     (palnnedTaskChanged)="onPlannedTaskChanged($event)"></app-planned-task-cartable>    
+        </div>
+    </mat-tab>   
+    <mat-tab *ngIf="hasIdc" label="Vendor IDCs"> 
+        <ng-template mat-tab-label> 
+            Document IDCs ({{idcCount}})
+         </ng-template> 
+        <div class="col-md-12" style="padding-top: 10px;" *ngIf="this.subject.getState() != undefined">   
+            <app-task-idc-cartable [project] = "this.subject.getState()" (idcChanged)="onIdcChanged($event)"></app-task-idc-cartable>
+        </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

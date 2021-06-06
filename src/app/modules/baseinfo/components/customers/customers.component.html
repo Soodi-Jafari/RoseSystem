@@ -1,0 +1,45 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>Customers</h6>
+ </div>
+ 
+<div class="content">  
+  <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [filterable]="true"  
+      [kendoGridSelectBy]="'id'"
+      [selectedKeys]="selectionRows" 
+      [pageable]="{
+        buttonCount: 20,
+        info: true,
+        type: 'type',
+        pageSizes: [20,50,100],
+        previousNext: true
+      }"
+      [scrollable]="'none'"
+      [selectable]="{
+        checkboxOnly: false,
+        mode : 'single'
+       }"     
+      (dataStateChange)="dataStateChange($event)"
+    >
+    <ng-template kendoGridToolbarTemplate position="top">
+        <button *ngxPermissionsOnly="['newCustomer']"  (click)="new()" class="k-button grid-Button">Add Customer</button>
+        <button *ngxPermissionsOnly="['editCustomer']"  (click)="edit()" class="k-button grid-Button">Edit Customer</button>
+        <button *ngxPermissionsOnly="['deleteCustomer']" (click)="delete()" class="k-button grid-Button">Delete Customer</button>
+
+      </ng-template>
+    <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+    <kendo-grid-column headerClass="grid-header" field="customerName" title="Customer Name"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="customerType.title" title="Customer Type"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="contactName" title="contactName"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="tel" title="Tel"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="fax" title="Fax"></kendo-grid-column>
+       
+  </kendo-grid>
+</div>

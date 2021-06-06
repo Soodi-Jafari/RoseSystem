@@ -1,0 +1,164 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">Timesheet</h6>
+</div>
+
+
+<div class="modal-body" style="font-size:12px">
+
+  <div class="row">
+    <div class="col-md-3">
+      <div>
+        <label class="label"><span style="color:red">* </span>Project / Organization Activitiy</label>
+      </div>
+      <div>
+        <kendo-combobox #projectList style="width:100%" [data]="projects" [(ngModel)]="project" [filterable]="true"
+          textField="title" valueField="id" (valueChange)="projectSelectionChange($event)"></kendo-combobox>
+      </div>
+    </div>
+
+
+    <div class="col-md-3">
+      <div>
+        <label class="label"><span style="color:red">* </span>Section</label>
+      </div>
+      <div>
+        <kendo-combobox #sectionLList style="width:100%" name="section" [data]="sections" [filterable]="true"
+          (valueChange)="sectionSelectionChange($event)" textField="title" valueField="id" [(ngModel)]="section">
+        </kendo-combobox>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label><br></label>
+      </div>
+      <div>
+        <button class="btn btn-info" (click)="clearSelection()">Clear Selection</button>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div>
+        <label><br></label>
+      </div>
+      <div style="font-size: 14px;">
+        <label style="font-weight: 500; padding-right: 5px;">Jalali Date:  </label> {{selectedDateJalali}}
+      </div>     
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 15px;">
+    <div class="col-md-3">
+      <div>
+        <label class="label activity">Activities</label>
+      </div>
+      <div id="actTreeView"></div>
+    </div>
+    <div class="col-md-5">
+      <div>
+        <label class="label activity">Tasks</label>
+      </div>
+      <div #grid id="grid"></div>
+    </div>
+    <div class="col-md-4">
+      <div>
+        <label class="label activity" style="padding-right: 10px;">Scheduler</label>
+        <span *ngIf="isDayView"><span *ngFor="let time of dayUserInOut; let idx = index">
+            <span
+              style="font-weight: 500; color: green; padding-left: 10px;">{{(idx % 2) == 0 ? "Enter: " : "Leave: "}}</span><span
+              style="padding-left: 3px;">{{setTimeFormat(time)}}</span>
+          </span>
+          <span
+            style="font-weight: 500; color: brown; padding-left: 10px;">{{(dayUserInOut.length % 2) == 1 ? "Leave: ?":""}}</span>
+        </span>
+      </div>
+      <div #scheduler id="scheduler"></div>
+    </div>
+  </div>
+
+  <!--   <div id="event-template">
+    <div class="movie-template">
+      <p>
+          #: kendo.toString(start, "hh:mm") # - #: kendo.toString(end, "hh:mm") #
+      </p>
+      <h3>#: title #</h3>
+      <p>#: description #</p>
+      </div>
+    </div> -->
+  <div id="customEditorTemplate" hidden="true">
+    <div class="k-edit-label"><label for="title">Title</label></div>
+    <div data-container-for="title" class="k-edit-field">
+      <input type="text" class="k-textbox" name="title" required="required" data-bind="value:title">
+    </div>
+    <div class="k-edit-label">
+      <label for="start">Start</label>
+    </div>
+    <div data-container-for="start" class="k-edit-field">
+      <input type="text" data-role="datetimepicker" data-interval="15" data-type="date"
+        data-bind="value:start,invisible:isAllDay" name="start" />
+      <input type="text" data-type="date" data-role="datepicker" data-bind="value:start,visible:isAllDay"
+        name="start" />
+      <span data-bind="text: startTimezone"></span>
+      <span data-for="start" class="k-invalid-msg" style="display: none;"></span>
+    </div>
+    <div class="k-edit-label"><label for="end">End</label></div>
+    <div data-container-for="end" class="k-edit-field">
+      <input type="text" data-type="date" data-role="datetimepicker" data-bind="value:end,invisible:isAllDay" name="end"
+        data-datecompare-msg="End date should be greater than or equal to the start date" />
+      <input type="text" data-type="date" data-role="datepicker" data-bind="value:end,visible:isAllDay" name="end"
+        data-datecompare-msg="End date should be greater than or equal to the start date" />
+      <span data-bind="text: endTimezone"></span>
+      <span data-bind="text: startTimezone, invisible: endTimezone"></span>
+      <span data-for="end" class="k-invalid-msg" style="display: none;"></span>
+    </div>
+
+    <div data-bind="value:dailyVacationType,visible:eventType == 7">
+      <div class="k-edit-label"><label for="dailyVacationType"><span style="color:red">* </span> Vacation Type</label>
+      </div>
+      <div data-container-for="dailyVacationType" class="k-edit-field">
+        <select id="dailyVacationType" data-bind="value:dailyVacationType" data-role="dropdownlist"
+          data-value-field="value" data-text-field="text">
+          <option value="1">استحقاقی</option>
+          <option value="2">بدون حقوق</option>
+          <option value="3">استعلاجی</option>
+          <option value="4">توافقی</option>
+        </select>
+      </div>
+    </div>
+    <div data-bind="value:transportType,visible:eventType == 3">
+      <div class="k-edit-label"><label for="transportType"><span style="color:red">* </span> Transport</label></div>
+      <div data-container-for="transportType" class="k-edit-field">
+        <select id="transportType" data-bind="value:transportType" data-role="dropdownlist" data-value-field="value"
+          data-text-field="text">
+          <option value="2">اتومبیل شخصی</option>
+          <option value="3">اتومبیل شرکت</option>
+          <option value="4">آژانس</option>
+        </select>
+      </div>
+    </div>
+    <div data-bind="value:transportType,visible:eventType == 4">
+      <div class="k-edit-label"><label for="dmtransportType"><span style="color:red">* </span> Transport</label></div>
+      <div data-container-for="transportType" class="k-edit-field">
+        <select id="dmtransportType" data-bind="value:transportType" data-role="dropdownlist" data-value-field="value"
+          data-text-field="text">
+          <option value="1">هواپیما</option>
+          <option value="2">اتومبیل شخصی</option>
+          <option value="3">اتومبیل شرکت</option>
+          <option value="4">آژانس</option>
+        </select>
+      </div>
+    </div>
+    <div class="k-edit-label"><label for="description"><span data-bind="value:description,visible:eventType == 4"
+          style="color:red">* </span> Description</label></div>
+    <div data-container-for="description" class="k-edit-field">
+      <textarea rows="3" cols="200" name="description" class="k-textbox" data-bind="value:description"></textarea>
+    </div>
+    <div data-bind="value:eventType,visible:false">
+      <div class="k-edit-label"><label for="eventType"> eventType</label></div>
+      <div data-container-for="eventType" class="k-edit-field">
+        <select id="eventType" data-bind="value:eventType" data-role="dropdownlist" data-value-field="value"
+          data-text-field="text">
+
+        </select>
+      </div>
+    </div>
+  </div>

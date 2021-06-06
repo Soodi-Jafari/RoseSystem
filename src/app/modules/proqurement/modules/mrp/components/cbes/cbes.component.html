@@ -1,0 +1,131 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+    <h6 class="modal-title" id="modal-basic-title">CBEs - {{data.mrp.mrpNo}} / {{data.mrp.title}}</h6>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+    <div class="modal-body" style="font-size:12px">
+     
+      <div class="row">
+          <div class="col-md-5">
+              <div>
+                  <label class="label"><span style="color:red">*</span> CBE.No</label>
+              </div>
+              <div>
+                <input type="text" (blur)="setFileUrl()" [(ngModel)] ="viewModel.cbeNo" class="rose-form-control">
+                       
+              </div>              
+          </div>
+          <div class="col-md-5">
+              <div>
+                  <label class="label"><span style="color:red">*</span> CBE Date</label>
+              </div>
+              <div>
+                  <mat-form-field>
+                      <input matInput [matDatepicker]="cbeDatePicker"  [(ngModel)] ="viewModel.cbeDate" >
+                      <mat-datepicker-toggle matSuffix [for]="cbeDatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #cbeDatePicker></mat-datepicker>
+                    </mat-form-field>   
+                       
+              </div>              
+          </div>
+          <div class="col-md-2">
+              <div>
+                  <label><br></label>
+              </div>
+              <div>
+                  <button *ngxPermissionsOnly="['saveCBE']" class="btn btn-success" (click)="save()">Save</button>
+              </div>              
+          </div>
+      </div>
+      <div class="row" style="padding-top: 10px;">   
+          <div class="col-md-12">
+              <div class="content">  
+                  <kendo-grid #grid
+                  [data]="gridView"
+                  [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+                  [pageable]="{
+                    buttonCount: 5,
+                    info: true,
+                    type: 'type',
+                    pageSizes: true,
+                    previousNext: true
+                  }"
+                   [sortable]="true"
+                   [scrollable]="'none'"
+                  (dataStateChange)="onStateChange($event)"
+                  (cellClick)="cellClickHandler($event)"
+                  (cellClose)="cellCloseHandler($event)"                 
+                  [navigable]="true"
+                >
+               
+                <kendo-grid-column headerClass="grid-header" field="vendorName" title="Vendor" editable='false'></kendo-grid-column>
+                <kendo-grid-column headerClass="grid-header"field="basePrice" editor="numeric" title="Price(Rial)">
+                    <ng-template kendoGridCellTemplate let-dataItem>       
+                        <span>
+                                {{dataItem.basePrice | commaSeperated}}
+                        </span>
+                    </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column headerClass="grid-header" field="currencyPrice" editor="numeric" title="Price(Curr.)" format="{0:c}"></kendo-grid-column>
+                <kendo-grid-column headerClass="grid-header" field="currencyUnit" title="CurrencyUnit">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                       {{currencyUnit(dataItem.currencyUnit?.id)?.title}} 
+                      <!--  {{currencyUnit?.title}} -->
+                      </ng-template>
+                  <ng-template kendoGridEditTemplate
+                    let-dataItem="dataItem"
+                    let-column="column"
+                    let-formGroup="formGroup">
+                    <kendo-dropdownlist
+                  
+                      [data]="currencyUnits"
+                      textField="title"
+                      valueField="id"
+                      [formControl]="formGroup.get('currencyUnit')"
+                    >
+                    </kendo-dropdownlist>
+                    <!-- <kendo-popup
+                        [anchor]="ddl.element"
+                        *ngIf="formGroup.get(column.field).invalid && !(isNew && formGroup.get(column.field).untouched)"
+                        popupClass="k-widget k-tooltip k-tooltip-validation k-invalid-msg"
+                       >
+                        <span class="k-icon k-i-warning"></span>
+                        Category is required
+                     </kendo-popup> -->
+                  </ng-template>          
+                </kendo-grid-column>
+                <kendo-grid-column  headerClass="grid-header"field="description" editor="text" title="Description"></kendo-grid-column>
+              
+              </kendo-grid>
+                </div>
+           </div>
+          </div>
+
+          <div class="row" style="padding-top: 10px;">   
+            <div class="col-md-12">
+               <kendo-upload
+                    [saveUrl]="uploadSaveUrl"
+                    [restrictions]="myRestrictions"
+                    [withCredentials]="false"
+                    [multiple] ="false"
+                    [showFileList]="false"
+                    [disabled]="viewModel.cbeNo == null || viewModel.cbeNo == undefined"
+                    (success) = "successEventHandler($event)">
+                </kendo-upload> 
+              
+            </div>
+            <div class="col-md-12" *ngIf ="viewModel.fileName !== undefined && viewModel.fileName !== null">
+              <div>Name: <a [href]="getPath()" target="_blank" title="Download">{{viewModel.fileName}}</a>  Size: {{fileSizeFormat(viewModel.fileSize)}} 
+                <span style="padding:5px;"> <button *ngxPermissionsOnly="['saveCBE']" (click)="deleteFile()" class="k-button grid-Button">Delete File</button> </span></div>               
+                
+            </div>
+    
+         </div>
+    
+    </div>
+  
+  
+  

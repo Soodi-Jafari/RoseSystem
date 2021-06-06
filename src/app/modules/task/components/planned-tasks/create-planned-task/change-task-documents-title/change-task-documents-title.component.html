@@ -1,0 +1,56 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 5px">
+   <h6 class="modal-title" id="modal-basic-title">Change Document Title</h6>
+   <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+     <span aria-hidden="true">&times;</span>
+   </button>
+ </div>
+
+ <div class="modal-body" style="font-size:12px">
+  <div class="row" style="padding-top: 5px;">
+    <div class="col-md-6">
+        <div>
+            <label class="label"><span style="color:red">*</span> Documnet No. </label>
+        </div>
+        <div>
+            <input readonly type="text" [(ngModel)] ="viewModel.documentNo" class="rose-form-control">              
+        </div>
+    </div>    
+  </div>
+  <div class="row" style="padding-top: 5px;">
+    <div class="col-md-6">
+        <div>
+            <label class="label">New Documnet No. </label>
+        </div>
+        <div>
+            <input type="text" [(ngModel)] ="viewModel.newDocumentNo" class="rose-form-control">              
+        </div>
+    </div>    
+  </div>
+  <div class="row"  style="padding-top: 12px;">
+    <div class="col-md-12">
+      <div>
+          <label class="label"><span style="color:red">*</span>Document Title</label>
+      </div>
+      <div> 
+          <input readonly type="text" [(ngModel)] ="viewModel.documentTitle" class="rose-form-control">     
+      </div>      
+    </div>
+  </div>
+  <div class="row"  style="padding-top: 12px;">
+    <div class="col-md-12">
+      <div>
+          <label class="label">New Document Title</label>
+      </div>
+      <div> 
+          <input type="text" [(ngModel)] ="viewModel.newDocumentTitle" class="rose-form-control">     
+      </div>      
+    </div>
+  </div>
+</div>
+
+  
+<div class="modal-footer">
+  <button class="btn btn-success" (click)="save()">Save</button>
+  <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+</div>

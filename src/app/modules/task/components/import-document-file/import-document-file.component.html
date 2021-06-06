@@ -1,0 +1,75 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">Import Document Weight</h6>    
+</div>
+
+<div class="modal-body" style="font-size:12px">
+  <div class="row">  
+
+    <div class="col-md-4">
+        <div>
+            <label class="label"><span style="color:red">*</span>Project</label>
+        </div>
+        <div>
+            <kendo-combobox
+            #projectList
+            style="width:100%"
+            [data]="projects"
+            [(ngModel)] ="project"
+            [filterable]="true"
+            textField="title"
+            valueField="id"
+            (valueChange)="projectSelectionChange($event)"></kendo-combobox> 
+        </div>              
+    </div>
+  </div>
+  <div class="row" style="padding-top: 20px;">  
+      <div class="col-md-2">
+         <kendo-upload
+              [saveUrl]="uploadSaveUrl"
+              [restrictions]="myRestrictions"
+              [withCredentials]="false"
+              [multiple] ="false"
+              [showFileList]="false"
+              (success) = "successEventHandler($event)"
+              (error)="errorEventHandler($event)">
+          </kendo-upload> 
+        
+      </div>
+      <div class="col-md-5">
+        <div > {{ successMessege }}</div>
+        <div  style="color:red"> {{ errorMessege }}</div>              
+      </div>
+  </div>
+
+   <div class="content" style="font-size:12px"> 
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12">  
+      <kendo-grid #grid
+      [data]="gridView"   
+      [pageSize]="state.take"
+      [skip]="state.skip"         
+      [pageable]="{
+        buttonCount: 10,
+        info: true,
+        type: 'type',
+        pageSizes: true,
+        previousNext: true
+      }"
+      [scrollable]="'none'"  
+      [sort]="state.sort"
+      [sortable]="true"
+      [filter]="state.filter"
+      [filterable]="true"  
+      (dataStateChange)="dataStateChange($event)">        
+      
+       <kendo-grid-column  headerClass="grid-header"  field="documentNo" title="Document No."></kendo-grid-column>
+       <kendo-grid-column  headerClass="grid-header"  field="project" title="Project"></kendo-grid-column>
+       <kendo-grid-column  headerClass="grid-header"  field="weight" title="Weight"></kendo-grid-column>
+       <kendo-grid-column  headerClass="grid-header"  field="subWeight" title="Subcontractor Weight"></kendo-grid-column>
+       <kendo-grid-column  headerClass="grid-header"  field="classDoc" title="class"></kendo-grid-column>
+      </kendo-grid>
+     </div>
+    </div>
+  </div>
+</div>

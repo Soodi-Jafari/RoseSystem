@@ -1,0 +1,55 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">Employees Attendance</h6>
+  <div class="rose-refresh-grid"> <i title="Refresh" (click)="getAttendance()" class="fa fa-refresh fa-fw"></i>
+  </div>
+</div>
+
+
+<div class="modal-body" style="direction: rtl;">
+
+  <div class="row">
+    <div class="col-md-2" style="direction: rtl;">
+      <div *ngFor="let pers of personnels1" style="padding: 3px; text-align: right"
+        [ngClass]="(pers.inOut == true )?'myGreen':'myRed'">
+        <span style="font-size:16px;"> {{pers.fullName}} </span> <span style="font-size:14px;">
+          {{ pers.inOut == true ? setTimeFormat(pers.lastTime) : "" }} </span>
+      </div>
+    </div>
+    <div class="col-md-2" style="direction: rtl;">
+      <div *ngFor="let pers of personnels2" style="padding: 3px; text-align: right"
+        [ngClass]="(pers.inOut == true )?'myGreen':'myRed'">
+        <span style="font-size:16px;"> {{pers.fullName}} </span> <span style="font-size:14px;">
+          {{ pers.inOut == true ? setTimeFormat(pers.lastTime) : "" }} </span>
+      </div>
+    </div>
+    <div class="col-md-2" style="direction: rtl;">
+      <div *ngFor="let pers of personnels3" style="padding: 3px; text-align: right"
+        [ngClass]="(pers.inOut == true )?'myGreen':'myRed'">
+        <span style="font-size:16px;"> {{pers.fullName}} </span> <span style="font-size:14px;">
+          {{ pers.inOut == true ? setTimeFormat(pers.lastTime) : "" }} </span>
+      </div>
+    </div>
+    <div class="col-md-2" style="direction: rtl;">
+      <div *ngFor="let pers of personnels4" style="padding: 3px; text-align: right"
+        [ngClass]="(pers.inOut == true )?'myGreen':'myRed'">
+        <span style="font-size:16px;"> {{pers.fullName}} </span> <span style="font-size:14px;">
+          {{ pers.inOut == true ? setTimeFormat(pers.lastTime) : "" }} </span>
+      </div>
+    </div>
+    <div class="col-md-2" style="direction: rtl;">
+      <div *ngFor="let pers of personnels5" style="padding: 3px; text-align: right"
+        [ngClass]="(pers.inOut == true )?'myGreen':'myRed'">
+        <span style="font-size:16px;"> {{pers.fullName}} </span> <span style="font-size:14px;">
+          {{ pers.inOut == true ? setTimeFormat(pers.lastTime) : "" }} </span>
+      </div>
+    </div>
+    <div class="col-md-2" style="direction: rtl;">
+      <div *ngFor="let pers of personnels6" style="padding: 3px; text-align: right"
+        [ngClass]="(pers.inOut == true )?'myGreen':'myRed'">
+        <span style="font-size:16px;"> {{pers.fullName}} </span> <span style="font-size:14px;">
+          {{ pers.inOut == true ? setTimeFormat(pers.lastTime) : "" }} </span>
+      </div>
+    </div>
+  </div>
+</div>

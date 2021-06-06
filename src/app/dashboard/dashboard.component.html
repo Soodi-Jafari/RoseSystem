@@ -1,0 +1,16 @@
+<div>
+  <h5>Dashboard</h5>
+</div>
+<div class="content" style="font-size:12px"> 
+ <!--  <div id="timediv">  
+    <p>{{allMessages}}</p>  
+</div> -->
+  <div class="row" >   
+   <div class="col-md-6" style="padding-top: 10px;" *ngIf="subject.getState() != undefined">   
+    <app-task-dashboard [project] = "subject.getState()"></app-task-dashboard>    
+  </div> 
+  <div class="col-md-6" style="padding-top: 10px;" *ngIf="subject.getState() != undefined">   
+    <app-procurement-dashboard [project] = "subject.getState()"></app-procurement-dashboard>    
+  </div>
+ </div>
+</div>

@@ -1,0 +1,56 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>Transmittal Documents</h6>
+</div>
+<div class="modal-body" style="font-size:12px">
+  
+   <div class="content" style="font-size:12px"> 
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12">  
+      <kendo-grid #grid
+          [data]="gridView"   
+          [pageSize]="state.take"
+          [skip]="state.skip"         
+          [pageable]="{
+            buttonCount: 10,
+            info: true,
+            type: 'type',
+            pageSizes: true,
+            previousNext: true
+          }"
+          [scrollable]="'none'"
+          [sort]="state.sort"
+          [sortable]="true"
+          [filter]="state.filter"
+          [filterable]="true"  
+          [groupable]="true"
+          [group]="state.group"
+        (dataStateChange)="dataStateChange($event)">        
+        <ng-template kendoGridToolbarTemplate position="top">           
+            <div class="rose-refresh-grid"> <i title="Refresh" (click)="getTransmittals()" class="fa fa-refresh fa-fw"></i> </div>
+        </ng-template>
+            <kendo-grid-column  headerClass="grid-header" [width]="170" field="transmittal.transmittalNo" title="Transmittal No."></kendo-grid-column> 
+            <kendo-grid-column  headerClass="grid-header" [width]="170" field="documentNo" title="Document No."></kendo-grid-column>     
+            <kendo-grid-column  headerClass="grid-header"  field="documentTitle" title="Document Title"></kendo-grid-column>    
+            <kendo-grid-column  headerClass="grid-header" [width]="170" field="disciplineName" title="Discipline"></kendo-grid-column>   
+            <kendo-grid-column  headerClass="grid-header" [width]="80" field="revision" title="Rev"></kendo-grid-column> 
+            <kendo-grid-column headerClass="grid-header" [width]="100"  filter="date" format="MM/dd/yyyy" field="transmittal.transmittalDate" title="Transmittal Date">
+              <ng-template kendoGridCellTemplate let-dataItem>       
+                  <span>
+                          {{dataItem.transmittal.transmittalDate | date}}
+                  </span>
+              </ng-template>          
+            </kendo-grid-column>
+            <kendo-grid-column  headerClass="grid-header" [width]="150" field="purposeOfIssue.title" title="Purpose Of Issue"></kendo-grid-column>
+            <kendo-grid-column headerClass="grid-header" [width]="100"  filter="date" format="MM/dd/yyyy" field="creationDate" title="Creation Date">
+              <ng-template kendoGridCellTemplate let-dataItem>       
+                  <span>
+                          {{dataItem.creationDate | date}}
+                  </span>
+              </ng-template>          
+            </kendo-grid-column> 
+      </kendo-grid>
+     </div>
+    </div>
+  </div>
+</div>

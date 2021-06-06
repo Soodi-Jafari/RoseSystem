@@ -1,0 +1,82 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="content" style="font-size:12px"> 
+    <kendo-grid #grid
+        [data]="gridView"   
+        [pageSize]="state.take"
+        [skip]="state.skip"         
+        [kendoGridSelectBy]="'id'"
+        [selectedKeys]="selectionRows" 
+        [pageable]="{
+          buttonCount: 10,
+          info: true,
+          type: 'type',
+          pageSizes: true,
+          previousNext: true
+        }"
+        [selectable]="{
+          checkboxOnly: true,
+          mode : 'multiple'
+          }"     
+     
+        (cellClick)="cellClickHandler($event)"
+        (cellClose)="cellCloseHandler($event)"                 
+        [navigable]="true"
+        [sort]="state.sort"
+        [sortable]="true"
+        [scrollable]="'none'"
+        [filter]="state.filter"
+        [filterable]="true"  
+        (dataStateChange)="dataStateChange($event)">        
+     
+      <kendo-grid-checkbox-column headerClass="grid-header" [width]="30" showSelectAll="true"></kendo-grid-checkbox-column>
+      <kendo-grid-column  headerClass="grid-header" [width]="180" editable='false' field="documentNo" title="Document No."></kendo-grid-column>     
+      <kendo-grid-column  headerClass="grid-header"  editable='false' field="documentTitle" title="Document Title"></kendo-grid-column>    
+      <kendo-grid-column  headerClass="grid-header" [width]="140" editable='false' field="disciplineName" title="Discipline"></kendo-grid-column>   
+      <kendo-grid-column  headerClass="grid-header" [width]="80" editable='true' field="revision" title="Rev"></kendo-grid-column> 
+      <kendo-grid-column  headerClass="grid-header" [width]="140" editable='true' field="purposeOfIssue" title="Document Status">
+          <ng-template kendoGridCellTemplate let-dataItem>
+              {{purposeOfIssueTitle(dataItem.purposeOfIssue?.id)?.title}} 
+          </ng-template>
+         <!--  <ng-template kendoGridEditTemplat
+              let-dataItem="dataItem"
+              let-column="column"
+              let-formGroup="formGroup">
+              <select  [formControl]="formGroup.get('purposeOfIssue')"> 
+                <option *ngFor="let p of purposeOfIssues" [ngValue]="p.id">{{p.title}}</option> 
+              </select>                   
+          </ng-template>   -->
+          <ng-template kendoGridEditTemplate
+          let-dataItem="dataItem"
+          let-column="column"
+          let-formGroup="formGroup">
+          <kendo-dropdownlist
+        
+            [data]="purposeOfIssues"
+            textField="title"
+            valueField="id"
+            [formControl]="formGroup.get('purposeOfIssue')"
+          >
+          </kendo-dropdownlist>         
+        </ng-template>                
+      </kendo-grid-column>         
+      <kendo-grid-column  headerClass="grid-header" [width]="80" editable='true' field="sheetNo" title="Sheet No."></kendo-grid-column> 
+      <kendo-grid-column  headerClass="grid-header" [width]="80" editable='true' field="pageType" title="Page Type">
+        <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+              {{getTransmittalPageType(dataItem.pageType)}}
+            </span>
+        </ng-template>   
+        <ng-template kendoGridEditTemplate
+            let-dataItem="dataItem"
+            let-column="column"
+            let-formGroup="formGroup">
+            <select  [formControl]="formGroup.get('pageType')"> 
+              <option *ngFor="let p of pageTypes" [ngValue]="p.id">{{p.title}}</option> 
+            </select>                   
+        </ng-template>         
+       </kendo-grid-column>              
+    </kendo-grid>
+  </div> 
+  <div class="modal-footer">
+    <button *ngxPermissionsOnly="['saveTransmittalDoc']" class="btn btn-success" (click)="save()">Save Documents</button>
+  </div>

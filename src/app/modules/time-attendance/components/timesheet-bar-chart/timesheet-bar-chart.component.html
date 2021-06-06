@@ -1,0 +1,100 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-body" style="font-size:12px">
+  <div class="row">
+    <div class="col-md-2">
+      <div>
+        <label class="label"><span style="color:red">*</span>From Date</label>
+      </div>
+      <div>
+        <mat-form-field>
+          <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="viewModel.startTask">
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label class="label"><span style="color:red">*</span>To Date</label>
+      </div>
+      <div>
+        <mat-form-field>
+          <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="viewModel.endTask">
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div> 
+    <div class="col-md-4">
+      <div>
+        <label class="label">Event Type</label>
+      </div>
+      <div>
+        <kendo-multiselect name="eventType" [data]="eventTypes" textField="title" valueField="id"
+          [(ngModel)]="viewModel.eventTypes"></kendo-multiselect>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label><br></label>
+      </div>
+      <div>
+          <mat-checkbox [(ngModel)] ="viewModel.isProjectActivities">Project Activity</mat-checkbox>
+      </div>
+     </div>
+    <div class="col-md-2">
+      <div>
+        <label><br></label>
+      </div>
+      <div>
+        <button class="btn btn-success" (click)="filter()">Filter</button>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-12">
+      <hr/>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-3">
+      <div>
+        <label class="label"><span style="color:red">*</span> Category </label>
+      </div>
+      <div>
+        <kendo-combobox #projectList style="width:100%" [data]="timesheetFields" [(ngModel)]="viewModel.category"
+          textField="title" valueField="id">
+        </kendo-combobox>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div>
+        <label class="label"><span style="color:red">*</span> Group By</label>
+      </div>
+      <div>
+        <kendo-combobox #userList style="width:100%" [data]="timesheetFields" [(ngModel)]="viewModel.groupby"
+          textField="title" valueField="id" (valueChange)="fieldSelectionChange($event)"></kendo-combobox>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 20px;">
+    <div class="col-md-12">
+      <kendo-chart style="height: 500px;">
+        <kendo-chart-title text="Timesheet Report"></kendo-chart-title>
+        <!-- <kendo-chart-legend position="bottom" orientation="horizontal">
+        </kendo-chart-legend> -->
+        <kendo-chart-series>
+          <kendo-chart-series-item *ngFor="let item of series" [data]="item.items" [name]="item.value"
+            field="durationNumber" [categoryField]="viewModel.category.name" type="column" aggregate="sum">
+            <kendo-chart-series-item-tooltip>
+              <ng-template let-dataItem="item" let-value="value">
+                {{ item.value }} : {{ value }}
+              </ng-template>
+            </kendo-chart-series-item-tooltip>
+          </kendo-chart-series-item>
+        </kendo-chart-series>
+      </kendo-chart>
+    </div>
+  </div>
+</div>

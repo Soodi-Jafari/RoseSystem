@@ -1,0 +1,68 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+    <h6 class="modal-title" id="modal-basic-title">Vendor Transmittal Document - {{data.transmittal.transmittalNo}}</h6>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+    <div class="modal-body" style="font-size:12px">
+     
+      <div class="row">
+          <div class="col-md-12">
+              <div class="content">  
+                  <kendo-grid
+                      [data]="gridView"
+                      [pageSize]="state.take"
+                      [skip]="state.skip"
+                      [sort]="state.sort"
+                      [filter]="state.filter"
+                      [sortable]="true"
+                      [filterable]="true"  
+                      [kendoGridSelectBy]="'id'"
+                      [selectedKeys]="selectionRows" 
+                      [pageable]="{
+                        buttonCount: 5,
+                        info: true,
+                        type: 'type',
+                        pageSizes: true,
+                        previousNext: true
+                      }"
+                      [scrollable]="'none'"
+                      [selectable]="{
+                        checkboxOnly: false,
+                        mode : 'single'
+                    }"                          
+                    (dataStateChange)="dataStateChange($event)"
+                    >
+                    <ng-template kendoGridToolbarTemplate position="top">
+                        <button *ngxPermissionsOnly="['newVendorTransmitalDoc']" (click)="new()" class="k-button grid-Button">Add Document</button>
+                        <button *ngxPermissionsOnly="['editVendorTransmitalDoc']" (click)="edit()" class="k-button grid-Button">Edit Document</button>
+                     </ng-template>
+                    <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+                    <kendo-grid-column headerClass="grid-header" field="vpis.title" title="Document No."></kendo-grid-column>
+                    <kendo-grid-column headerClass="grid-header"  field="discipline"  title="Discipline"></kendo-grid-column>
+                    <kendo-grid-column headerClass="grid-header"  field="revision"  [width]="50"  title="Rev."></kendo-grid-column>
+                    <kendo-grid-column headerClass="grid-header" [width]="100" field="purposeOfIssue.title" title="PurposeOfIssue">
+                    </kendo-grid-column>
+                    <kendo-grid-column headerClass="grid-header"  field="currentState" title="State">
+                        <ng-template kendoGridCellTemplate let-dataItem>       
+                            <span>
+                                {{getStateTitle(dataItem.currentState)}}
+                            </span>
+                          </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column headerClass="grid-header" field="creationDate" title="Creation Date">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                        <span>
+                                {{dataItem.creationDate | date}}
+                        </span>
+                      </ng-template>
+                    </kendo-grid-column>
+                   </kendo-grid>
+                </div>
+           </div>
+          </div>
+    
+    </div>
+  

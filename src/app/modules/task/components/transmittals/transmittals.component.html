@@ -1,0 +1,78 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>Transmittals</h6>
+</div>
+<div class="modal-body" style="font-size:12px">
+  
+   <div class="content" style="font-size:12px"> 
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12">  
+      <kendo-grid #grid
+          [data]="gridView"   
+          [pageSize]="state.take"
+          [skip]="state.skip"         
+          [kendoGridSelectBy]="'id'"
+          [selectedKeys]="selectionRows" 
+          [pageable]="{
+            buttonCount: 10,
+            info: true,
+            type: 'type',
+            pageSizes: true,
+            previousNext: true
+          }"
+          [scrollable]="'none'"
+          [selectable]="{
+            checkboxOnly: false,
+            mode : 'single'
+        }"  
+          [sort]="state.sort"
+          [sortable]="true"
+          [filter]="state.filter"
+          [filterable]="true"  
+          [groupable]="true"
+          [group]="state.group"
+        (dataStateChange)="dataStateChange($event)">        
+        <ng-template kendoGridToolbarTemplate position="top">
+            <button *ngxPermissionsOnly="['newTransmittal']" (click)="new()" class="k-button grid-Button">Add Transmittal</button>
+            <button *ngxPermissionsOnly="['editTransmittal']" (click)="edit()" class="k-button grid-Button">Edit Transmittal</button>
+            <button *ngxPermissionsOnly="['newTransmittal']" (click)="copyTransmittal()" class="k-button grid-Button">CopyTransmittal</button>
+            <button *ngxPermissionsOnly="['viewTransmittalDoc']" (click)="viewDocuments()" class="k-button grid-Button">Transmittal Documents</button>
+            <button *ngxPermissionsOnly="['deleteTransmittal']" (click)="delete()" class="k-button grid-Button">Delete Transmittal</button>
+         
+            <div class="rose-refresh-grid"> <i title="Refresh" (click)="getTransmittals()" class="fa fa-refresh fa-fw"></i> </div>
+        </ng-template>
+        <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>       
+        <kendo-grid-column  headerClass="grid-header" [width]="170" field="transmittalNo" title="Transmittal No."></kendo-grid-column>
+        <kendo-grid-column headerClass="grid-header" [width]="120"  filter="date" format="MM/dd/yyyy" field="transmittalDate" title="Transmittal Date">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+              <span>
+                      {{dataItem.transmittalDate | date}}
+              </span>
+          </ng-template>          
+         </kendo-grid-column> 
+        <kendo-grid-column headerClass="grid-header" [width]="150" field="transmittalType" title="Transmittal Type">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+              <span>
+                {{getTransmittalType(dataItem.transmittalType)}}
+              </span>
+          </ng-template>          
+         </kendo-grid-column>
+         <kendo-grid-column  headerClass="grid-header" [width]="170" field="customer.title" title="Client"></kendo-grid-column> 
+        <kendo-grid-column headerClass="grid-header" [width]="120"  filter="date" format="MM/dd/yyyy" field="creationDate" title="Creation Date">
+            <ng-template kendoGridCellTemplate let-dataItem>       
+                <span>
+                        {{dataItem.creationDate | date}}
+                </span>
+            </ng-template>
+        </kendo-grid-column>          
+        <kendo-grid-column  [width]="150" headerClass="grid-header">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+              <button (click)="printPreview(dataItem)" class="k-button">Print Preview</button>
+              <button *ngIf="dataItem.isArchived != true" (click)="autoArchive(dataItem)" class="k-button">Auto Archive</button>
+          </ng-template>
+        </kendo-grid-column>      
+      </kendo-grid>
+     </div>
+    </div>
+  </div>
+</div>

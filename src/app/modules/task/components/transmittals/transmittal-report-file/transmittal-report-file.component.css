@@ -1,0 +1,153 @@
+.transmittalPage{
+   margin: 10px;
+   border: 1px solid black;
+ /*   min-height: 900px; */
+   width: 100%;
+}
+
+.trans-top{
+    height: 150px;
+    border-bottom: 1px solid black;
+}
+.trans-top-title
+{
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.trans-top-reportTitle
+{
+    padding: 10px 25px 5px 25px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 570;
+}
+.trans-top-contractNo
+{
+    text-align: center;
+    font-size: 14px;
+    font-weight: 450;   
+}
+.trans-top-report-title
+{
+    height: 110px;
+    border-bottom: 1px solid black;
+}
+.trans-top-doc
+{
+    text-align: center;
+    padding-top: 10px;
+    font-size: 14px;
+    font-weight: 400;
+}
+.trans-logo{
+    text-align: center;
+    padding-top: 20px;
+}
+.logo-img
+{
+    width: 100px;
+    height: 100px;
+    max-width: 100%;
+}
+.trans-header
+{
+    height: 100px;
+    border-bottom: 1px solid black;
+}
+
+.trans-header-right
+{
+    padding-right: 0px;
+    border-right: 1px solid black;
+}
+.trans-header-label
+{
+   padding: 5px 5px;
+   min-width: 110px;
+   font-size: 12px;
+   font-weight: 400;
+}
+.trans-header-text
+{   
+    padding: 5px 0px;
+    font-size: 13px;
+    font-weight: 500;
+}
+.trans-doc
+{
+  min-height: 600px;
+}
+.trans-doc-header
+{ 
+    min-height: 30px;
+    font-size: 13px;
+    font-weight: 500;
+    border-bottom: 1px solid black;
+}
+
+.trans-doc-header-label{
+    text-align: left;
+    padding: 5px 5px 5px 5px;
+    white-space: wrap;
+    border-right:1px solid black;
+ 
+}
+.trans-doc-item{
+    min-height: 40px;
+    font-size: 14px;
+    border-bottom: 1px solid black;
+}
+.trans-footer-info
+{
+    border-top: 1px solid black;
+    min-height: 75px;
+    font-size: 13px;
+    font-weight: 500;
+}
+.trans-footer-info span
+{
+    width: 230px;
+    padding: 5px 10px;
+}
+.trans-footer-comment
+{
+    border-top: 1px solid black;
+    min-height: 75px;
+    font-size: 13px;
+    font-weight: 500;
+}
+.trans-footer-comment span
+{
+    min-width: 150px;
+    padding: 10px 10px;
+}
+.trans-footer-comment div
+{
+    padding: 10px 10px;
+}
+
+.sender span
+{
+    min-width: 220px;
+    padding: 5px 10px;
+}
+
+.trans-footer-reciever
+{
+    border-top: 1px solid black;
+    min-height: 30px;
+    font-size: 13px;
+    font-weight: 500;
+}
+.trans-footer-reciever .title
+{
+    min-width: 200px;
+    padding: 10px 10px;
+}
+.trans-footer-reciever .label
+{
+    width: 400px;
+    padding: 10px 10px;
+}

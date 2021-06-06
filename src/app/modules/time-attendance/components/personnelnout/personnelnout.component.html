@@ -1,0 +1,84 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">Personnel Attendance</h6>
+</div>
+
+<div class="modal-body" style="font-size:12px">
+
+  <div class="row">
+    <div class="col-md-3">
+      <div>
+        <label class="label"><span style="color:red">* </span>User</label>
+      </div>
+      <div>
+        <kendo-combobox #userList style="width:100%" [data]="users" [(ngModel)]="viewModel.user" [filterable]="true"
+          (valueChange)="getAttendance()" textField="title" valueField="id"></kendo-combobox>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label class="label"><span style="color:red"> * </span>Year</label>
+      </div>
+      <div>
+        <kendo-combobox style="width:100%" [data]="fiscallYears" [(ngModel)]="viewModel.year"
+          (valueChange)="getAttendance()" textField="id" valueField="id"></kendo-combobox>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label class="label"><span style="color:red"> * </span>Month</label>
+      </div>
+      <div>
+        <kendo-combobox style="width:100%" [data]="shamssiMonth" [(ngModel)]="viewModel.month"
+          (valueChange)="getAttendance()" textField="title" valueField="id"></kendo-combobox>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-12">
+      <div class="content">
+        <kendo-grid #grid [data]="gridView" [scrollable]="'none'" [selectable]="{
+          checkboxOnly: false,
+          mode : 'single'
+      }" [selectedKeys]="selectionRows" [kendoGridSelectBy]="'id'" (dataStateChange)="dataStateChange($event)">
+          <ng-template kendoGridToolbarTemplate position="top">
+            <button (click)="addEvent(5)" class="k-button grid-Button">Over Time</button>
+            <button (click)="addEvent(6)" class="k-button grid-Button">Hourly Vacation</button>
+            <button (click)="addEvent(7)" class="k-button grid-Button">Daily Vacation</button>
+            <button (click)="addEvent(3)" class="k-button grid-Button">Hourly Mission</button>
+            <button (click)="addEvent(4)" class="k-button grid-Button">Daily Mission</button>
+            <button type="button" kendoGridExcelCommand icon="file-excel">Export to Excel</button>
+            <div class="rose-refresh-grid"> <i title="Refresh" (click)="getAttendance()"
+                class="fa fa-refresh fa-fw"></i>
+            </div>
+          </ng-template>
+          <kendo-grid-checkbox-column headerClass="grid-header" [width]="20">
+          </kendo-grid-checkbox-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="dayOfWeek" title="Day"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="100" field="dayDate" title="Date"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="100" field="userDate" title="MDate">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>
+                {{dataItem.userDate | date}}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="enter1" title="Enter"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="leave1" title="Leave"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="enter2" title="Enter"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="leave2" title="Leave"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="enter3" title="Enter"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="leave3" title="Leave"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="enter4" title="Enter"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="leave4" title="Leave"></kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="hourlyVacation" title="Hourly Leave">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="overtime" title="Over Time">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="50" field="total" title="Total"></kendo-grid-column>
+          <kendo-grid-excel fileName="PersonnelInOut.xlsx"></kendo-grid-excel>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

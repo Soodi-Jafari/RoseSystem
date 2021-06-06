@@ -1,0 +1,38 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+  <h5 class="modal-title" id="modal-basic-title">Document Files</h5>
+  <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body" style="font-size:12px">
+  <div class="row" style="padding-top: 10px;">
+   <!--  <div class="col-md-12">
+     <div>
+         <label class="label">File Path</label>
+     </div>
+     <div>
+       <input type="text" readonly [value] ="viewModel.fileDirection" class="rose-form-control">                           
+     </div>
+    </div> -->
+    <div class="col-md-12" style="padding-top: 10px;">          
+     <div>
+      <label class="label"> Comment</label>
+     </div>
+      <div>
+        <textarea rows="5" cols="200" type="text" readonly  [value]="viewModel.comment" class="textarea-form-control"></textarea>                
+     </div>                 
+    </div>  
+   </div>  
+   <div class="row" style="padding-top: 10px;">
+   <div class="col-md-12">
+    <mat-list>
+       <h6 mat-subheader> File Attachs</h6>
+       <mat-divider style="padding-bottom: 10px;">       
+         </mat-divider>           
+     </mat-list>  
+     <app-attach-file [attachFiles]="viewModel.flowAttachs"  [disabled]="true"></app-attach-file>    
+    </div> 
+  </div>
+</div>

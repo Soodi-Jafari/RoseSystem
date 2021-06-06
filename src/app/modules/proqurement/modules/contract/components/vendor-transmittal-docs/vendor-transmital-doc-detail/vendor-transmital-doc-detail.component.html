@@ -1,0 +1,102 @@
+
+ <app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 5px">
+    <h6 class="modal-title" id="modal-basic-title">Vendor Tansmittal</h6>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+    <div class="modal-body" style="font-size:12px">
+      <div class="row" style="padding-top: 5px;">
+        <div class="col-md-6">
+            <div>
+                <label class="label"><span style="color:red">*</span> Documnet No. </label>
+            </div>
+            <div>
+              <kendo-combobox
+              #docList
+              style="width:100%"
+              [data]="vpiss"
+              [(ngModel)] ="viewModel.vpis"
+              [filterable]="true"
+              textField="title"
+              [readonly]="isReadonly"
+              valueField="id"></kendo-combobox>                 
+            </div>
+        </div>
+        
+         <div class="col-md-6">
+            <div>
+                <label *ngIf="data.transmittal.transmittalType == 1" class="label"><span style="color:red">*</span> Purpose Of Issue </label>
+                <label *ngIf="data.transmittal.transmittalType == 2" class="label"><span style="color:red">*</span> Document Status </label>  
+            </div>
+            <div>
+              <kendo-combobox
+              #issueList
+              style="width:100%"
+              [data]="purposeOfIssues"
+              [(ngModel)] ="viewModel.purposeOfIssue"
+              [filterable]="true"
+              textField="title"
+              [readonly]="isReadonly"
+              valueField="id"></kendo-combobox>                 
+            </div>
+       </div>    
+      </div>
+       <div class="row" style="padding-top: 5px;">
+        <div class="col-md-6">
+            <div>
+                <label class="label">Revision</label>
+            </div>
+            <div>
+              <input [readonly]="isReadonly" type="text" [(ngModel)] ="viewModel.revision" class="rose-form-control">                           
+            </div>
+        </div>
+        
+         <div class="col-md-6" *ngIf="data.transmittal.transmittalType == 1">
+            <div>
+              <label class="label"> Deadline</label>
+            </div>
+            <div>
+              <mat-form-field>
+                <input [readonly]="isReadonly" matInput [matDatepicker]="deadlineDatePicker"  [(ngModel)] ="viewModel.deadline" >
+                 <mat-datepicker-toggle [disabled]="isReadonly" matSuffix [for]="deadlineDatePicker"></mat-datepicker-toggle>
+                 <mat-datepicker #deadlineDatePicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+       </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div>
+              <label class="label">Description</label>
+          </div>
+          <div> 
+              <textarea [readonly]="isReadonly" rows="3" cols="200" type="text"  [(ngModel)] ="viewModel.description" class="textarea-form-control"></textarea>     
+          </div>      
+        </div>
+      </div>
+      <div class="row" style="padding-top:5px;">
+        <div class="col-md-12">
+            <div>
+                <label class="label">File Direction</label>
+            </div>
+            <div>
+              <input type="text" [readonly]="isReadonly"  [(ngModel)] ="viewModel.fileDirection" class="rose-form-control">                           
+            </div>
+        </div>
+      </div>
+      <div class="row" style="padding-top: 5px;">   
+        <div class="col-md-12">       
+           <app-attach-file [attachFiles]="viewModel.fileAttachs" [disabled] ="isReadonly"
+             [uploadSaveUrl]="uploadSaveUrl" (attachFileChanged)="onAttachFileChanged($event)"></app-attach-file> 
+        </div>  
+      </div> 
+  </div>
+  
+  <div class="modal-footer">
+      <button [disabled]="isReadonly" *ngxPermissionsOnly="['saveVendorTransmittal']"  class="btn btn-success" (click)="save()">Save</button>
+      <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+  </div>

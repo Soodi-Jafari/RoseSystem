@@ -1,0 +1,68 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title"> Discipline Resources</h6>
+  <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body" style="font-size:12px">
+
+  <div class="row">
+   <!--  <div class="col-md-4">
+      <div>
+        <label class="label"><span style="color:red">*</span>From Date</label>
+      </div>
+      <div>
+        <mat-form-field>
+          <input matInput [matDatepicker]="startDatePicker" [(ngModel)]="viewModel.startDate">
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div>
+        <label class="label"><span style="color:red">*</span>To Date</label>
+      </div>
+      <div>
+        <mat-form-field>
+          <input matInput [matDatepicker]="endDatePicker" [(ngModel)]="viewModel.endDate">
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div> -->
+    <div class="col-md-3">
+      <div>
+        <label><br></label>
+      </div>
+      <div>
+        <button class="btn btn-success" (click)="save()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-12">
+      <div class="content">
+        <kendo-grid #grid [data]="gridView" [pageSize]="gridState.take" [skip]="gridState.skip" [sort]="gridState.sort"
+          [pageable]="{
+                    buttonCount: 10,
+                    info: true,
+                    type: 'type',
+                    pageSizes: true,
+                    previousNext: true
+                  }" [sortable]="true" [scrollable]="'none'" (dataStateChange)="onStateChange($event)"
+          (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" [navigable]="true">
+
+          <kendo-grid-column headerClass="grid-header" field="disciplineTitle" title="Discipline" editable='false'>
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" field="availableResources" 
+            title="Available Resources"></kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+
+</div>

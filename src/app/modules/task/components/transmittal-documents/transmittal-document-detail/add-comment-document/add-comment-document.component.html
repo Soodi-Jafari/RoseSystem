@@ -1,0 +1,140 @@
+<app-loading *ngIf="isLoading"></app-loading>
+      <mat-list>
+          <mat-list-item>Issued Documents</mat-list-item>
+          <mat-divider>       
+          </mat-divider> 
+        </mat-list> 
+  <div class="col-md-12"  style="padding-top: 10px;">
+      <div class="content" style="font-size:12px"> 
+          <kendo-grid #docGrid
+              [data]="tranDocGridView"   
+              [pageSize]="docGridState.take"
+              [skip]="docGridState.skip"         
+              [kendoGridSelectBy]="'id'"
+              [selectedKeys]="tranDocSelectionRows" 
+              [pageable]="{
+                buttonCount: 10,
+                info: true,
+                type: 'type',
+                pageSizes: true,
+                previousNext: true
+              }"
+              [selectable]="{
+                checkboxOnly: false,
+                mode : 'multiple'
+              }"  
+              [sort]="docGridState.sort"
+              [sortable]="true"
+              [scrollable]="'none'"
+              [filter]="docGridState.filter"
+              [filterable]="true"  
+              (dataStateChange)="transDocdataStateChange($event)">        
+            <ng-template kendoGridToolbarTemplate position="top">
+                <button *ngxPermissionsOnly="['newTransmittalDoc']" (click)="addToList()" class="k-button grid-Button">Add To List</button>   
+            </ng-template>
+            <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+            <kendo-grid-column  headerClass="grid-header" [width]="170" field="transmittal.transmittalNo" title="Transmittal No."></kendo-grid-column> 
+            <kendo-grid-column  headerClass="grid-header" [width]="170" field="documentNo" title="Document No."></kendo-grid-column>     
+            <kendo-grid-column  headerClass="grid-header"  field="documentTitle" title="Document Title"></kendo-grid-column>    
+            <kendo-grid-column  headerClass="grid-header" [width]="170" field="disciplineName" title="Discipline"></kendo-grid-column>   
+            <kendo-grid-column  headerClass="grid-header" [width]="80" field="revision" title="Rev"></kendo-grid-column> 
+            <kendo-grid-column  headerClass="grid-header" [width]="150" field="purposeOfIssue.title" title="Purpose Of Issue"></kendo-grid-column>           
+          </kendo-grid>
+        </div> 
+   </div>
+
+
+<div style="padding-top: 20px;"> 
+  <mat-list>
+      <mat-list-item>Selected Documents List</mat-list-item>
+      <mat-divider>       
+      </mat-divider> 
+    </mat-list> 
+<div class="row" style="padding-top: 10px;" >
+  <div class="col-md-12">
+    <div class="content" style="font-size:12px"> 
+      <kendo-grid #grid
+          [data]="gridView"   
+          [pageSize]="state.take"
+          [skip]="state.skip"         
+          [kendoGridSelectBy]="'id'"
+          [selectedKeys]="selectionRows" 
+          [pageable]="{
+            buttonCount: 5,
+            info: true,
+            type: 'type',
+            pageSizes: true,
+            previousNext: true
+          }"
+          [selectable]="{
+            checkboxOnly: true,
+            mode : 'single'
+            }"     
+       
+          (cellClick)="cellClickHandler($event)"
+          (cellClose)="cellCloseHandler($event)"                 
+          [navigable]="true"
+          [sort]="state.sort"
+          [sortable]="true"
+          [scrollable]="'none'"
+          [filter]="state.filter"
+          [filterable]="true"  
+          (dataStateChange)="dataStateChange($event)">        
+          <ng-template kendoGridToolbarTemplate position="top">
+              <button *ngxPermissionsOnly="['deleteTransmittalDoc']" (click)="delete()" class="k-button grid-Button">Delete</button>
+          </ng-template>
+        <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+        <kendo-grid-column  headerClass="grid-header" [width]="180" editable='false' field="documentNo" title="Document No."></kendo-grid-column>     
+        <kendo-grid-column  headerClass="grid-header"  editable='false' field="documentTitle" title="Document Title"></kendo-grid-column>    
+        <kendo-grid-column  headerClass="grid-header" [width]="140" editable='false' field="disciplineName" title="Discipline"></kendo-grid-column>   
+        <kendo-grid-column  headerClass="grid-header" [width]="80" editable='false' field="revision" title="Rev"></kendo-grid-column> 
+        <kendo-grid-column  headerClass="grid-header" [width]="140" editable='true' field="purposeOfIssue" title="Purpose Of Issue">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{purposeOfIssueTitle(dataItem.purposeOfIssue?.id)?.title}} 
+            </ng-template>
+            <ng-template kendoGridEditTemplate
+            let-dataItem="dataItem"
+            let-column="column"
+            let-formGroup="formGroup">
+            <kendo-dropdownlist
+          
+              [data]="purposeOfIssues"
+              textField="title"
+              valueField="id"
+              [formControl]="formGroup.get('purposeOfIssue')"
+            >
+            </kendo-dropdownlist>         
+          </ng-template>                
+        </kendo-grid-column>         
+        <kendo-grid-column  headerClass="grid-header" [width]="80" editable='true' field="sheetNo" title="Sheet No."></kendo-grid-column> 
+        <kendo-grid-column  headerClass="grid-header" [width]="80" editable='true' field="pageType" title="Page Type">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+              <span>
+                {{getTransmittalPageType(dataItem.pageType)}}
+              </span>
+          </ng-template>   
+          <ng-template kendoGridEditTemplate
+              let-dataItem="dataItem"
+              let-column="column"
+              let-formGroup="formGroup">
+              <select  [formControl]="formGroup.get('pageType')"> 
+                <option *ngFor="let p of pageTypes" [ngValue]="p.id">{{p.title}}</option> 
+              </select>                   
+          </ng-template>         
+         </kendo-grid-column>   
+         <kendo-grid-column  [width]="80" headerClass="grid-header">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+              <button (click)="AddFiles(dataItem)" class="k-button">Add File</button>
+          </ng-template>
+         </kendo-grid-column>                
+      </kendo-grid>
+    </div> 
+    
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button *ngxPermissionsOnly="['saveTransmittalDoc']" class="btn btn-success" (click)="save()">Save Documents</button>
+<!--    <button mat-stroked-button (click)="closeDialog()">Cancel</button> -->
+</div> 
+</div>

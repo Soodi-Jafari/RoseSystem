@@ -1,0 +1,63 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>VPIS Report </h6>
+</div>
+
+<div class="content" style="font-size:12px">  
+
+      <div class="row" style="padding-top: 10px;">   
+        <div class="col-md-12">
+          <div class="content">  
+              <kendo-grid #grid
+                  
+              [data]="gridView"
+              [pageSize]="state.take"
+              [skip]="state.skip"
+              [sort]="state.sort"
+              [filter]="state.filter"
+              [sortable]="true"
+              [scrollable]="'virtual'"
+              [filterable]="true"  
+              [kendoGridSelectBy]="'id'"
+              [pageable]="{
+                 buttonCount: 15,
+                 info: true,
+                 type: 'type',
+                 pageSizes: true,
+                 previousNext: true
+                    }"    
+              [groupable]="true"
+              [group]="state.group"
+              (dataStateChange)="dataStateChange($event)">        
+              <ng-template kendoGridToolbarTemplate position="top">
+                <div class="rose-refresh-grid"> <i title="Refresh" (click)="getReport()" class="fa fa-refresh fa-fw"></i> </div>
+              </ng-template>
+                <kendo-grid-column [width]="120"  headerClass="grid-header"field="documentNo" title="Document No."></kendo-grid-column>
+                <kendo-grid-column [width]="300"   headerClass="grid-header"field="description" title="Description"></kendo-grid-column>
+                <kendo-grid-column [width]="120"  headerClass="grid-header"field="discipline" title="Discipline"></kendo-grid-column>
+                <kendo-grid-column [width]="220"   headerClass="grid-header"field="vendor" title="Vendor"></kendo-grid-column>
+<!--                 <kendo-grid-column [width]="120"   headerClass="grid-header"field="contractNo" title="Contract No."></kendo-grid-column> -->
+                <kendo-grid-column [width]="120"   headerClass="grid-header"field="lastTransmittalNo" title="Transmittal No."></kendo-grid-column>
+                <kendo-grid-column [width]="120"  headerClass="grid-header" filter="date" format="MM/dd/yyyy" field="lastTransmittalDate" title="Transmittal Date">
+                    <ng-template kendoGridCellTemplate let-dataItem>       
+                        <span>
+                                {{dataItem.lastTransmittalDate | date}}
+                        </span>
+                    </ng-template>
+                </kendo-grid-column>             
+                <kendo-grid-column [width]="120"   headerClass="grid-header"field="lastTransmittalRev" title="Transmittal Rev."></kendo-grid-column>
+                <kendo-grid-column [width]="120"   headerClass="grid-header"field="lastCommentNo" title="Comment No."></kendo-grid-column>
+                <kendo-grid-column [width]="120"  headerClass="grid-header" filter="date" format="MM/dd/yyyy" field="lastCommentDate" title="Comment Date">
+                    <ng-template kendoGridCellTemplate let-dataItem>       
+                        <span>
+                                {{dataItem.lastCommentDate | date}}
+                        </span>
+                    </ng-template>
+                </kendo-grid-column>             
+                <kendo-grid-column [width]="120"   headerClass="grid-header"field="lastCommentRev" title="Comment Rev."></kendo-grid-column>
+              </kendo-grid>
+            </div>
+        </div>
+      </div>
+
+  </div>

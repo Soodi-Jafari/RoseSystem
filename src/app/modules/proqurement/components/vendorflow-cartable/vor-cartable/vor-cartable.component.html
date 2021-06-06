@@ -1,0 +1,61 @@
+<app-loading *ngIf="isLoading"></app-loading>
+      <kendo-grid #grid
+          [data]="gridView"   
+          [sort]="state.sort"
+          [sortable]="true"
+          [scrollable]="'none'"
+          [filter]="state.filter"
+          [filterable]="true"  
+          [groupable]="true"
+          [group]="state.group"
+        (dataStateChange)="dataStateChange($event)">        
+       <ng-template kendoGridToolbarTemplate position="top">
+          <div class="rose-refresh-grid"> <i title="Refresh" (click)="getMRPVendorFlows()" class="fa fa-refresh fa-fw"></i> </div>
+        </ng-template>
+        <kendo-grid-column  [width]="80" *ngxPermissionsOnly="['viewMrpVendorFlow']"  headerClass="grid-header">
+              <ng-template kendoGridCellTemplate let-dataItem>       
+                  <button (click)="editRow(dataItem)" class="k-button">View</button>
+              </ng-template>
+        </kendo-grid-column>  
+        <kendo-grid-column  headerClass="grid-header"field="discipline" title="Discipline">
+          <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="state.group"
+            let-aggregates="aggregates">
+            <p style="color:darkblue">  {{value}} - ({{aggregates["discipline"].count}})</p>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header"field="vendor.title" title="Vendor"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header"field="subject" title="Subject"></kendo-grid-column>
+        <kendo-grid-column headerClass="grid-header" field="letterNo" title="Letter No"></kendo-grid-column>
+        <kendo-grid-column headerClass="grid-header" filter="date" format="MM/dd/yyyy" field="creationDate" title="Creation Date">
+            <ng-template kendoGridCellTemplate let-dataItem>       
+                <span>
+                        {{dataItem.creationDate | date}}
+                </span>
+            </ng-template>
+        </kendo-grid-column>             
+        <kendo-grid-column headerClass="grid-header" field="correspondenceType" title="Correspondence Type">
+        <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{getCorespondenceTitle(dataItem.correspondenceType)}}
+            </span>
+        </ng-template>
+       </kendo-grid-column>              
+        <kendo-grid-column headerClass="grid-header" field="currentState" title="Current State">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+              <span>
+                      {{getStateTitle(dataItem.currentState)}}
+              </span>
+          </ng-template>
+          <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="state.group"
+             let-aggregates="aggregates">
+            <p style="color:darkblue"> {{getStateTitle(value)}} - ({{aggregates["currentState"].count}})</p>
+          </ng-template>
+         </kendo-grid-column>
+         <kendo-grid-column headerClass="grid-header" filter="date" format="MM/dd/yyyy" field="deadline" title="Deadline">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+              <span>
+                      {{dataItem.deadline | date}}
+              </span>
+          </ng-template>
+         </kendo-grid-column>        
+      </kendo-grid>

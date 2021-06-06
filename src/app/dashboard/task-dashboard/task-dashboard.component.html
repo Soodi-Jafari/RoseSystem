@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-header>
+    <h6 style="color: darkblue;">Planned Tasks</h6>
+  </mat-card-header>  
+  <mat-card-content>
+    <div class="content" style="font-size:12px"> 
+      <mat-tab-group>
+        <mat-tab >
+            <ng-template mat-tab-label> 
+              Planned Tasks ({{ptCount}})
+            </ng-template>
+            <div class="col-md-12" style="padding-top: 10px;margin-bottom: 5px;" *ngIf="project != undefined">   
+               <app-grid-document-dashboard [project] = "project" [type]="6" 
+                         (sourcechanged)="onPlannedTaskChanged($event)"></app-grid-document-dashboard>    
+            </div>
+        </mat-tab>
+        <mat-tab *ngIf="hasIdc" label="Vendor IDCs"> 
+            <ng-template mat-tab-label> 
+              Document IDCs ({{idcCount}})
+             </ng-template> 
+            <div class="col-md-12" style="padding-top: 10px;margin-bottom: 5px;" *ngIf="project != undefined">   
+                <app-grid-idc-dashboard [project] = "project" [type]="3" (idcChanged)="onIdcChanged($event)"></app-grid-idc-dashboard>
+            </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </mat-card-content>
+
+</mat-card>

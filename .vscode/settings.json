@@ -1,0 +1,11 @@
+{
+    "svn.delete.ignoredRulesForDeletedFiles": [
+        "src\\app\\models\\mrpDocument.ts",
+        "dist\\my-app",
+        "dist",
+        "src\\app\\modules\\proqurement\\modules\\mrp\\components\\vendor-idcs",
+        "src\\app\\modules\\proqurement\\components\\vdr-list",
+        "src\\app\\modules\\proqurement\\components\\vendorflow-cartable\\vor-cartable\\vor-cartable.component.spec.ts",
+        "src\\app\\modules\\proqurement\\components\\vendorflow-cartable\\idc-cartable\\idc-cartable.component.spec.ts"
+    ]
+}

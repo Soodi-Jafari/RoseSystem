@@ -1,0 +1,138 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">User Requests</h6>
+</div>
+
+<div class="modal-body" style="font-size:12px">
+
+  <div class="row">
+    <div class="col-md-3">
+      <div>
+        <label class="label">Project</label>
+      </div>
+      <div>
+        <kendo-combobox #projectList style="width:100%" [data]="projects" [(ngModel)]="viewModel.project"
+          [filterable]="true" textField="title" valueField="id" (valueChange)="projectSelectionChange($event)">
+        </kendo-combobox>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div>
+        <label class="label"><span style="color:red">* </span>User</label>
+      </div>
+      <div>
+        <kendo-combobox #userList style="width:100%" [data]="users" [(ngModel)]="viewModel.user" [filterable]="true"
+          (valueChange)="getEvents()" textField="title" valueField="id"></kendo-combobox>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label class="label"><span style="color:red"> * </span>Year</label>
+      </div>
+      <div>
+        <kendo-combobox style="width:100%" [data]="fiscallYears" [(ngModel)]="viewModel.year"
+          (valueChange)="getEvents()" textField="id" valueField="id"></kendo-combobox>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label class="label"><span style="color:red"> * </span>Month</label>
+      </div>
+      <div>
+        <kendo-combobox style="width:100%" [data]="shamssiMonth" [(ngModel)]="viewModel.month"
+          (valueChange)="getEvents()" textField="title" valueField="id"></kendo-combobox>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div>
+        <label><br></label>
+      </div>
+      <div>
+        <button class="btn btn-success" (click)="filter()">Filter</button>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf= "allUserPermission == true">
+    <div class="col-md-3">
+      <mat-checkbox  [(ngModel)] ="viewModel.allUser"  (ngModelChange)="allUserChange($event)"> All Requests </mat-checkbox>
+    </div>
+    <div class="col-md-3">
+      <mat-checkbox  [(ngModel)] ="viewModel.notHR"  (ngModelChange)="notHRChange($event)"> Not HR Confirmed Requests </mat-checkbox>
+    </div>
+  </div>
+  <div class="row" style="padding-top: 10px;">
+    <div class="col-md-12">
+      <div class="content">
+        <kendo-grid #grid [data]="gridView" [sort]="state.sort" [sortable]="true" [scrollable]="'none'"
+          [filter]="state.filter" [filterable]="true" [groupable]="true" [kendoGridSelectBy]="'id'"
+          [selectedKeys]="selectionRows" [selectable]="{
+            checkboxOnly: false,
+            mode : 'single'
+           }" [group]="state.group" (dataStateChange)="dataStateChange($event)">
+          <ng-template kendoGridToolbarTemplate position="top">
+            <button (click)="viewEvent()" class="k-button grid-Button"><span class="k-icon k-i-check"
+                style="color: green;"></span> View</button>
+            <button *ngIf="deletePermision" (click)="deleteEvent()" class="k-button grid-Button"><span
+                class="k-icon k-i-delete" style="color: red;"></span> Delete</button>
+
+            <div class="rose-refresh-grid"> <i title="Refresh" (click)="getEvents()" class="fa fa-refresh fa-fw"></i>
+            </div>
+          </ng-template>
+
+          <kendo-grid-checkbox-column headerClass="grid-header" showSelectAll="false" [width]="10">
+          </kendo-grid-checkbox-column>
+          <kendo-grid-column headerClass="grid-header" [width]="30" title="No.">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>
+                {{dataItem.id}}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="60" field="eventTypeTitle" title="Event Type">
+            <ng-template kendoGridGroupHeaderTemplate let-value="value" let-group="state.group"
+              let-aggregates="aggregates">
+              <p style="color:darkblue"> {{value}} - ({{aggregates["eventTypeTitle"].count}})</p>
+            </ng-template>
+          </kendo-grid-column>
+  <!--         <kendo-grid-column headerClass="grid-header" [width]="250" field="title" title="Title">
+          </kendo-grid-column> -->
+          <kendo-grid-column headerClass="grid-header" [width]="250" field="owner" title="Owner">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="200" field="description" title="Description">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="150" field="project" title="Project">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="150" field="startDateJalali" title="Start Date">
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="150" field="endDateJalali" title="End Date">
+          </kendo-grid-column>
+          <!--       <kendo-grid-column headerClass="grid-header" [width]="80" field="duration" title="Request time">
+          </kendo-grid-column> -->
+          <kendo-grid-column headerClass="grid-header" [width]="100" field="startDate" title="Start">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>
+                {{dataItem.startDate | date}}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="100" field="endDate" title="End">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>
+                {{dataItem.endDate | date}}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="170" field="currentStatus" title="Current State">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              <span>
+                {{getStateTitle(dataItem.currentStatus)}}
+              </span>
+            </ng-template>
+          </kendo-grid-column>
+          <kendo-grid-column headerClass="grid-header" [width]="170" field="lastModifiedUser" title="Last Modified">
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+    </div>
+  </div>
+</div>

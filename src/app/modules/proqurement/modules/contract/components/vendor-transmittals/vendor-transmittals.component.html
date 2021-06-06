@@ -1,0 +1,87 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+
+ </div>
+ <mat-list>
+  <mat-list-item><h6>Vendor Transmittals</h6></mat-list-item>
+  <mat-divider>       
+  </mat-divider>
+</mat-list> 
+
+<div class="row" style="padding-top: 10px; padding-bottom: 20px;">
+  <div class="col-md-4"> 
+    Vendor : {{contract?.mrpVendorTitle}}
+  </div>
+  <div class="col-md-4"> 
+    PO NO : {{contract?.poNo}}
+  </div>
+  <div class="col-md-4"> 
+     Discipline : {{contract?.discipline}}
+  </div>
+</div>
+
+
+<div class="content">  
+  <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [filterable]="true"  
+      [kendoGridSelectBy]="'id'"
+      [selectedKeys]="selectionRows" 
+      [pageable]="{
+        buttonCount: 10,
+        info: true,
+        type: 'type',
+        pageSizes: true,
+        previousNext: true
+      }"
+      [scrollable]="'none'"
+      [selectable]="{
+        checkboxOnly: false,
+        mode : 'single'
+    }"     
+      [groupable]="true"
+      [group]="state.group"
+      (dataStateChange)="dataStateChange($event)"
+    >
+    <ng-template kendoGridToolbarTemplate position="top">
+      <button *ngxPermissionsOnly="['newVendorTransmittal']" (click)="new()" class="k-button grid-Button">Add Transmittal</button>
+      <button *ngxPermissionsOnly="['editVendorTransmittal']" (click)="edit()" class="k-button grid-Button">Edit Transmittal</button> 
+      <button *ngxPermissionsOnly="['deleteVendorTransmittal']" (click)="delete()" class="k-button grid-Button">Delete Transmittal</button> 
+      <button *ngxPermissionsOnly="['viewVendorTransmittalDoc']" (click)="openDocuments()" class="k-button grid-Button">Transmittal Documents</button>
+      <span class="rose-refresh-grid"> <i title="Refresh" (click)="getTransmittals()" class="fa fa-refresh fa-fw"></i> </span>
+    </ng-template>
+    <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+    <kendo-grid-column headerClass="grid-header" field="transmittalNo" title="Transmittal No."></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="transmittalDate" title="Transmittal Date">
+      <ng-template kendoGridCellTemplate let-dataItem>       
+        <span>
+                {{dataItem.transmittalDate | date}}
+        </span>
+    </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="transmittalType" title="Transmittal Type">
+        <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{dataItem.transmittalType == 1 ? "Receive From Vendor" : "Issue For Vendor"}}
+            </span>
+        </ng-template>
+        <ng-template kendoGridCellTemplate let-dataItem>       
+          <span>
+                  {{getTransmittalTypeTitle(dataItem.paymentType)}}
+          </span>
+       </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="creationDate" title="Creation Date">
+      <ng-template kendoGridCellTemplate let-dataItem>       
+        <span>
+                {{dataItem.creationDate | date}}
+        </span>
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid>
+</div>

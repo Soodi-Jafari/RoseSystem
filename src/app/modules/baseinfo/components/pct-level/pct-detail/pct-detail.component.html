@@ -1,0 +1,121 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+    <h5 class="modal-title" id="modal-basic-title">PCT Condition</h5>
+   
+  </div>
+  
+    <div class="modal-body" style="font-size:12px">
+      <div class="row" style="padding-top: 10px;">
+        <div class="col-md-4">
+            <div>
+                <label class="label"><span style="color:red">*</span> Project</label>
+            </div>
+            <div> 
+              <kendo-combobox              
+              style="width:100%"
+              #projectList
+              [data]="projects"
+              [(ngModel)] ="viewModel.project"
+              [filterable]="true"
+              textField="title"
+              valueField="id"
+              (valueChange)="projectSelectionChange($event)"></kendo-combobox>  
+            </div>
+        </div>
+        <div class="col-md-4">          
+            <div>
+                <label class="label"><span style="color:red">*</span> Customer</label>
+            </div>
+            <div>
+              <kendo-combobox
+              style="width:100%"
+              [data]="customers"
+              [(ngModel)] ="viewModel.customer"
+              [filterable]="false"
+              textField="title"
+              valueField="id"></kendo-combobox>  
+            </div>
+        </div>
+        <div class="col-md-4">          
+            <div>
+                <label class="label"> Class</label>
+            </div>
+            <div>
+                <input type="text"  [(ngModel)] ="viewModel.documentClass" class="rose-form-control">
+            </div>
+          </div>
+      </div>
+      <div class="row" style="padding-top: 10px;">
+          
+          <div class="col-md-4">            
+              <div>
+                <label class="label"><span style="color:red">*</span> Purpose Of Issue</label>
+              </div>
+            <div>
+              <kendo-combobox
+              style="width:100%"
+              [data]="purposeOfIssues"
+              [(ngModel)] ="viewModel.purposeOfIssue" 
+              textField="title"
+              valueField="id"></kendo-combobox>  
+            </div>
+           </div>
+            <div class="col-md-4">              
+                <div>
+                    <label class="label"><span style="color:red">*</span> PCT</label>
+                  </div>
+                <div>
+                    <input type="text"  [(ngModel)] ="viewModel.pct" class="rose-form-control">
+                </div>
+            </div>           
+       </div>
+
+       <mat-list>
+        <mat-list-item>PCT Conditions</mat-list-item>
+      </mat-list>     
+        <div class="col-md-12">
+          <div class="content" style="font-size:12px"> 
+          
+            <kendo-grid #grid
+                [data]="gridView"   
+                [scrollable]="'none'"
+                [kendoGridSelectBy]="'id'"
+                [selectedKeys]="selectionRows" 
+                [selectable]="{
+                  checkboxOnly: false,
+                  mode : 'single'
+                }"     
+                (dataStateChange)="dataStateChange($event)">        
+              <ng-template kendoGridToolbarTemplate position="top">
+                  <button *ngxPermissionsOnly="['newPctLevel']" (click)="newCondition()" class="k-button grid-Button">Add </button>
+                 <!--  <button *ngxPermissionsOnly="['editPctLevel']" (click)="editCondition()" class="k-button grid-Button">Edit </button> -->
+                  <button *ngxPermissionsOnly="['deletePctLevel']" (click)="deleteCondition()" class="k-button grid-Button">Delete </button>
+              </ng-template> 
+              <kendo-grid-checkbox-column headerClass="grid-header" [width]="100"></kendo-grid-checkbox-column>
+             
+              <kendo-grid-column  headerClass="grid-header" field="feild" title="Feild">
+                  <ng-template kendoGridCellTemplate let-dataItem>       
+                      <span>
+                        {{getFieldTitle(dataItem.feild)}}
+                      </span>
+                  </ng-template>     
+              </kendo-grid-column>
+              <kendo-grid-column  headerClass="grid-header"  field="value" title="Value"></kendo-grid-column>
+            <!--   <kendo-grid-column  headerClass="grid-header" field="conditionOprand" title="Operand">
+                  <ng-template kendoGridCellTemplate let-dataItem>       
+                      <span>
+                        {{getOperandTitle(dataItem.conditionOprand)}}
+                      </span>
+                  </ng-template>
+              </kendo-grid-column> -->
+                             
+             </kendo-grid>
+            </div>
+          </div>
+    </div>
+
+  <div class="modal-footer">
+      <button *ngxPermissionsOnly="['savePctLevel']"  (click)="save()" class="btn btn-success">Save</button>
+      <button mat-stroked-button (click)="cancel()">Cancel</button>
+  </div>
+

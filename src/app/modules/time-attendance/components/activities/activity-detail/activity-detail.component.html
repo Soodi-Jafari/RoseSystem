@@ -1,0 +1,116 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+  <h5 class="modal-title" id="modal-basic-title">Activity</h5>
+  <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+  <div class="modal-body" style="font-size:12px">    
+    <div class="row"  style="padding-top: 10px;">
+        <div class="col-md-6">        
+            <div>
+                <label class="label"> Parent Activity</label>
+            </div>
+            <div>            
+                <kendo-combobox
+                style="width:100%"
+                #activityList
+                name ="activity"
+                [data]="activities"
+                [(ngModel)] ="viewModel.activity"
+                [filterable]="true"
+                textField="title"
+                valueField="id"></kendo-combobox>   
+            </div>
+       </div> 
+        <div class="col-md-6">                 
+            <div>
+                <label class="label"><span style="color:red">*</span>Title </label>
+            </div>
+            <div>
+                <input type="text" [(ngModel)] ="viewModel.title" class="rose-form-control">
+            </div>          
+        </div>      
+   
+    </div>
+    <div class="row"  style="padding-top: 10px;">
+      <div class="col-md-6">                 
+        <div>
+            <label class="label"><span style="color:red">*</span>Code </label>
+        </div>
+        <div>
+            <input type="text" [(ngModel)] ="viewModel.code" class="rose-form-control">
+        </div>          
+      </div>      
+      <div class="col-md-6">                 
+        <div>
+            <label class="label"><span style="color:red">*</span>Activity Type </label>
+        </div>
+        <div>
+          <select [(ngModel)] ="viewModel.activityType" class="rose-form-control"> 
+            <option *ngFor="let t of activityTypes" [ngValue]="t.id">{{t.title}}</option> 
+        </select>     
+        </div>          
+      </div>             
+    </div>
+    <div class="row"  style="padding-top: 10px;">
+    
+      <div  class="col-md-4">
+         <mat-checkbox  [(ngModel)] ="viewModel.isMain"> Is Main </mat-checkbox>
+      </div>   
+      <div  class="col-md-4">
+        <mat-checkbox  [(ngModel)] ="viewModel.isProjectize"> Is Projectize </mat-checkbox>
+      </div>          
+      <div class="col-md-4">
+        <mat-checkbox  [(ngModel)] ="viewModel.noneProjectize"> None Projectize </mat-checkbox>
+      </div>  
+    </div>
+
+    <div class="row"  style="padding-top: 10px;">        
+      <div class="col-md-4">
+        <mat-checkbox  [(ngModel)] ="viewModel.isForFeasibility"> Is For Feasibility </mat-checkbox>
+      </div>
+      <div class="col-md-4">
+        <mat-checkbox  [(ngModel)] ="viewModel.isForTender"> Is For Tender </mat-checkbox>
+      </div>
+      <div class="col-md-4">
+       <mat-checkbox  [(ngModel)] ="viewModel.isForProcurement"> Is For Procurement </mat-checkbox>
+     </div>
+    </div>
+    
+    <div class="row"  style="padding-top: 10px;">
+      <div class="col-md-12">                 
+        <div>
+            <label class="label"> Description </label>
+        </div>
+        <div>
+            <input type="text" [(ngModel)] ="viewModel.description" class="rose-form-control">
+        </div>          
+      </div>        
+    </div>
+
+    <div class="row"  style="padding-top: 10px;">
+      <div class="col-md-12">               
+        <div>
+           <label class="label"> Sections </label>
+        </div>
+        <div>
+          <kendo-multiselect 
+          #sectionLList
+          name ="section"
+          [data]="sections"
+          [filterable]="true"
+          textField="title"
+          valueField="id"
+          [(ngModel)]="viewModel.sections"></kendo-multiselect>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+<div class="modal-footer">
+    <button class="btn btn-success" *ngxPermissionsOnly="['saveActivity']" (click)="save()">Save</button>
+    <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+</div>

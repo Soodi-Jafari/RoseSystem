@@ -1,0 +1,93 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+    <h6 class="modal-title" id="modal-basic-title">Assing Planned Task</h6>    
+ </div>
+  
+    <div class="modal-body" style="font-size:12px">     
+      <div class="row">        
+          <div class="col-md-3">
+              <div>
+                  <label class="label">Due Date</label>
+              </div>
+              <div>
+                  <mat-form-field>
+                      <input matInput [matDatepicker]="dueDatePicker"  [(ngModel)] ="dueDate" >
+                      <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+                      <mat-datepicker #dueDatePicker></mat-datepicker>
+                  </mat-form-field>   
+                       
+              </div>              
+          </div>
+          <div class="col-md-5">
+              <div>
+                  <label><br></label>
+              </div>
+              <div>
+                  <span><button style="width: 100px" class="btn btn-primary" (click)="filterDocuments()">Filter</button></span>    
+                  <span style="padding-left: 10px" ><button style="width: 150px; padding-left: 20px" class="btn btn-success" (click)="assignTasks()">Assign To PSL</button></span>                             
+              </div>
+              
+          </div>
+      </div>
+      <div class="row" style="padding-top: 10px;">   
+          <div class="col-md-12">
+              <div class="content">  
+                  <kendo-grid #grid
+                  [data]="gridView"
+                  [pageSize]="gridState.take"
+                  [skip]="gridState.skip" 
+                  [sort]="gridState.sort"
+                  [pageable]="{
+                    buttonCount: 20,
+                    info: true,
+                    type: 'type',
+                    pageSizes: [20,50,100],
+                    previousNext: true
+                  }"
+                  [scrollable]="'none'"
+                  [sortable]="true"
+                  [kendoGridSelectBy]="'id'"
+                  [selectedKeys]="selectionRows" 
+                  [selectable]="{
+                    checkboxOnly: true,
+                    mode : 'multiple'
+                  }"     
+                  [filterable]="true"  
+                  [filter]="gridState.filter"
+                  [groupable]="true"
+                  [group]="gridState.group"
+                  (dataStateChange)="onStateChange($event)">
+
+                <kendo-grid-checkbox-column showSelectAll="true" headerClass="grid-header" [width]="40"></kendo-grid-checkbox-column>
+                <kendo-grid-column headerClass="grid-header" [width]="170" field="documentNo" title="Document No"></kendo-grid-column>
+                <kendo-grid-column headerClass="grid-header"field="documentTitle" title="Document Title"></kendo-grid-column>
+                <kendo-grid-column headerClass="grid-header" width="150" field="disciplineName" title="Discipline"></kendo-grid-column>
+               
+                <kendo-grid-column headerClass="grid-header" [width]="120" field="startDate" [filterable]="false" title="Start Date">
+                  <ng-template kendoGridCellTemplate let-dataItem>       
+                    <span>
+                            {{dataItem.startDate | date}}
+                    </span>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column headerClass="grid-header" [width]="120"  field="dueDate" [filterable]="false" title="Due Date">
+                  <ng-template kendoGridCellTemplate let-dataItem>       
+                    <span>
+                            {{dataItem.dueDate | date}}
+                    </span>
+                  </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [filterable]="false" headerClass="grid-header" width="100" field="priority" title="Priority">
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                       {{priority(dataItem.priority.id)?.title}} 
+                      </ng-template>
+                </kendo-grid-column>
+                <kendo-grid-column [filterable]="false" headerClass="grid-header" width="80" field="revision" title="Revision"></kendo-grid-column>
+              </kendo-grid>
+            </div>
+           </div>
+          </div>    
+    </div>
+  
+  
+  

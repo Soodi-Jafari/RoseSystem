@@ -1,0 +1,33 @@
+.event.k-event {
+    background-color: steelblue;
+  }
+.activity 
+  {
+    padding-top: 5px; 
+    font-size: 14px; 
+    font-weight: 500;
+  }
+  .k-grid-filter
+  {
+    height: 20px !important; 
+  }
+
+.k-scheduler-footer, .k-scheduler-toolbar {
+    padding: 8px;
+    /* border-width: 0; */
+    border-style: solid;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: relative;
+    white-space: nowrap;
+    background-color: #f6f6f6;
+}
+/* .k-scheduler {
+  display: flex !important;
+  flex-direction: column;
+  background-clip: padding-box;
+} */

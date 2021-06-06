@@ -1,0 +1,52 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>Projects</h6>
+ </div>
+ 
+<div class="content">  
+  <kendo-grid
+      [data]="gridView"
+      [pageSize]="state.take"
+      [skip]="state.skip"
+      [sort]="state.sort"
+      [filter]="state.filter"
+      [sortable]="true"
+      [filterable]="true"  
+      [kendoGridSelectBy]="'id'"
+      [selectedKeys]="selectionRows" 
+      [pageable]="{
+        buttonCount: 10,
+        info: true,
+        type: 'type',
+        pageSizes: [20,50,100],
+        previousNext: true
+      }"
+      [scrollable]="'none'"
+      [selectable]="{
+        checkboxOnly: false,
+        mode : 'single'
+       }"     
+      (dataStateChange)="dataStateChange($event)"
+    >
+    <ng-template kendoGridToolbarTemplate position="top">
+        <button *ngxPermissionsOnly="['saveProject']"  (click)="new()" class="k-button grid-Button">Add Project</button>
+        <button *ngxPermissionsOnly="['saveProject']"  (click)="edit()" class="k-button grid-Button">Edit Project</button>
+        <button *ngxPermissionsOnly="['saveProject']" (click)="delete()" class="k-button grid-Button">Delete Project</button>
+
+    </ng-template>
+    <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+    <kendo-grid-column headerClass="grid-header" field="projectName" title="Project Name"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" width="300" field="projectId" title="Project Id"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="projectP3.id" title="Primavera Project ID"></kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header"  field="isActive" title="Active">
+      <ng-template kendoGridCellTemplate let-dataItem>       
+        <mat-checkbox disabled [checked] ="dataItem.isActive"></mat-checkbox>
+      </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column headerClass="grid-header" field="inPMISSystem" title="In PMIS System">
+      <ng-template kendoGridCellTemplate let-dataItem>       
+        <mat-checkbox disabled [checked] ="dataItem.inPMISSystem"></mat-checkbox>
+      </ng-template>
+    </kendo-grid-column>   
+  </kendo-grid>
+</div>

@@ -1,0 +1,30 @@
+export enum Position {
+    Manager = 2,
+    DesciplineHead = 3,
+    Expert = 4,
+    DCC = 6,
+    PSL =7,
+    ProjectManager = 8,
+    ProjectControlerPSL = 9,
+    TenderCordinator = 10,
+    DepartmentManager = 11,
+    ProjectCordinator = 12,
+    QA = 13,
+    Consultant = 14,
+    Secretary = 15,
+    QC = 17,
+    ProcurementCoordinator = 18,
+    SystemAdmin = 19,
+    EngineeringManager = 20,
+    DataAnalyzer = 21,
+    HumanResources = 22,
+    DepartmtmentExpert = 23,
+   //organization Roles
+    ManagingDirector = 1,
+    Construction= 101,
+    ITAndSystems = 56,
+    QualitySystemsManager = 39,
+    orgDCC = 76,
+    QAQC = 55
+
+}

@@ -1,0 +1,62 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+    <h6 class="modal-title" id="modal-basic-title">VPIS - {{data.contract.poNo}} - {{data.contract.mrpVendorTitle}}</h6>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div class="modal-body" style="font-size:12px">     
+      <div class="row">
+          <div class="col-md-12">
+              <div class="content">  
+                  <kendo-grid
+                      [data]="gridView"
+                      [pageSize]="state.take"
+                      [skip]="state.skip"
+                      [sort]="state.sort"
+                      [filter]="state.filter"
+                      [sortable]="true"
+                      [filterable]="true"  
+                      [kendoGridSelectBy]="'id'"
+                      [selectedKeys]="selectionRows" 
+                      [pageable]="{
+                        buttonCount: 5,
+                        info: true,
+                        type: 'type',
+                        pageSizes: true,
+                        previousNext: true
+                      }"
+                      [scrollable]="'none'"
+                      [selectable]="{
+                        checkboxOnly: false,
+                        mode : 'single'
+                    }"                          
+                    (dataStateChange)="dataStateChange($event)"
+                    >
+                    <ng-template kendoGridToolbarTemplate position="top">
+                        <button *ngxPermissionsOnly="['newVpis']" (click)="new()" class="k-button grid-Button">Add</button>
+                        <button *ngxPermissionsOnly="['editVpis']" (click)="edit()" class="k-button grid-Button">Edit</button>
+                        <button *ngxPermissionsOnly="['deleteVpis']" (click)="delete()" class="k-button grid-Button">Delete</button>
+                     </ng-template>
+                    <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+                    <kendo-grid-column headerClass="grid-header" field="documentNo" title="DocumentNo"></kendo-grid-column>
+                    <kendo-grid-column headerClass="grid-header" field="description" title="Description"></kendo-grid-column>
+                    <kendo-grid-column headerClass="grid-header" field="descipline.title" title="Descipline"></kendo-grid-column>
+                    <kendo-grid-column headerClass="grid-header" field="classification" title="Classification"></kendo-grid-column>
+                    <kendo-grid-column headerClass="grid-header" field="planDate" title="PlanDate">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                        <span>
+                                {{dataItem.planDate | date}}
+                        </span>
+                    </ng-template>
+                    </kendo-grid-column>
+                    
+                
+                  </kendo-grid>
+                </div>
+           </div>
+          </div>
+    
+    </div>
+  

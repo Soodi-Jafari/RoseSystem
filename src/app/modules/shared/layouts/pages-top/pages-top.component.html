@@ -1,0 +1,36 @@
+<div class="pages-top">
+
+  <div class="avatar-wrap">
+    <div class="user-info-wrap">
+      <span class="user-name logout" #anchor role="button" (click)="onToggle()" title="{{currentUser?.fullname}}">{{currentUser?.fullname}} </span>
+      <kendo-popup class="popup" [anchor]="anchor" (anchorViewportLeave)="show = false" *ngIf="show">
+        <div class='content'>
+             <div class="content-menu"><a href="#" (click)="logout()">Logout</a> </div>
+        </div>
+      </kendo-popup> 
+    </div>  
+  </div>
+<!--   <div class="msg-entrance ring">
+      <span (click)="logout()" title="Log out" class="fa fa-sign-out"></span>     
+    </div>   -->
+
+    <div class="collapse-menu" (click)="_sidebarToggle()">
+          <i class="fa fa-dedent fa-fw" *ngIf="sidebarToggle"></i>
+          <i class="fa fa-indent fa-fw" *ngIf="!sidebarToggle"></i>
+    </div>
+
+        
+  <div class="search-group">
+    <div>
+       <kendo-combobox
+       style="width:100%"
+       [data]="projects"
+       [(ngModel)] ="selectedProject"
+       textField="title"
+       valueField="id"
+      (valueChange)="selectionChange($event)"></kendo-combobox>   
+
+   </div>
+  </div>
+ 
+</div>

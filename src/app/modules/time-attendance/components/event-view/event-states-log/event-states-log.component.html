@@ -1,0 +1,30 @@
+<mat-horizontal-stepper labelPosition="bottom" [selectedIndex]="approvalStates.length - 1" #stepper>
+  <mat-step *ngFor="let state of approvalStates" [stepControl]="state.id">
+    <ng-template matStepLabel>
+      <span matTooltip="{{getStateTitle(state.status)}}">{{getStateTitle(state.status)}}</span>
+    </ng-template>
+    <div class="row" style="padding-top: 15px;">
+      <div class="col-md-3">
+        <span style="font-weight:bold">{{getStateTitle(state.status)}} </span>
+      </div>
+      <div class="col-md-3">
+        <span style="font-weight:bold">By : </span> {{state.creationUser}}
+      </div>
+      <div class="col-md-3">
+        <span style="font-weight:bold"> Action Date: </span> {{state.creationDateJalali}}      
+      </div>
+    </div>
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12" style="padding-top: 10px;">
+        <div>
+          <label class="label"> Comment</label>
+        </div>
+        <div>
+       <!--    <input type="text" style="font-weight: 600;font-size: 14px;" readonly [value]="state.comment" class="rose-form-control"> -->
+          <textarea rows="3" style="font-weight: 600;font-size: 14px;" cols="200" type="text" readonly  [value]="state.comment" class="textarea-form-control"></textarea>  
+        </div>
+      </div>
+    </div>
+
+  </mat-step>
+</mat-horizontal-stepper>

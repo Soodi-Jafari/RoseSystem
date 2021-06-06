@@ -1,0 +1,94 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">MRPDocument - {{data.mrp.mrpNo}}/{{data.mrp.title}}</h6>
+  <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+  <div class="modal-body" style="font-size:12px">
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-6">
+          <div>
+              <label class="label"><span style="color:red">*</span> Document</label>
+          </div>
+          <div>
+              <kendo-combobox
+                #docList
+                style="width:100%"
+                [data]="documents"
+                [(ngModel)] ="viewModel.document"
+                [filterable]="true"
+                textField="title"
+                valueField="id"
+                (valueChange)="docSelectionChange($event)"></kendo-combobox>               
+          </div>
+      </div>
+      <div class="col-md-6">
+        <div>
+              <label class="label"><br/> </label>
+          </div>
+        <div class="button-row">
+        <button mat-raised-button *ngxPermissionsOnly="['saveMrpDocument']" color="primary" (click)="save()">Save</button>
+        <button mat-raised-button (click)="closeDialog()">Cancel</button>
+      </div>
+      </div>
+     
+    </div>
+    <div class="row" style="padding-top: 10px;">   
+    <div class="col-md-12">
+       <kendo-upload
+            [saveUrl]="uploadSaveUrl"
+            [removeUrl]="uploadRemoveUrl"
+            [restrictions]="myRestrictions"
+            [withCredentials]="false"
+            [showFileList]="false"
+            [disabled]="viewModel.document == null || viewModel.document == undefined"
+            (success) = "successEventHandler($event)">
+        </kendo-upload> 
+        
+    </div>
+    <div class="col-md-12">  
+      <kendo-grid
+          [data]="gridView"
+          [pageSize]="state.take"
+          [skip]="state.skip"
+          [sort]="state.sort"
+          [sortable]="true" 
+          [kendoGridSelectBy]="'id'"        
+          [pageable]="{
+            buttonCount: 5,
+            info: true,
+            type: 'type',
+            pageSizes: true,
+            previousNext: true
+          }"
+          [scrollable]="'none'"
+          (dataStateChange)="dataStateChange($event)"
+        >        
+        <kendo-grid-column headerClass="grid-header" field="fileName" title="FileName">
+       <ng-template kendoGridCellTemplate let-dataItem>       
+              <a [href]="getPath(dataItem)" target="_blank" title="Download">{{dataItem.fileName}}</a>                 
+      
+        </ng-template> 
+        </kendo-grid-column>
+        <kendo-grid-column headerClass="grid-header" field="fileSize" title="Size">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{fileSizeFormat(dataItem.fileSize)}}
+            </span>
+        </ng-template>
+        </kendo-grid-column> 
+        <kendo-grid-column *ngxPermissionsOnly="['saveMrpDocument']"  headerClass="grid-header">
+            <ng-template kendoGridCellTemplate let-dataItem>       
+                <button (click)="deleteFile(dataItem)" class="k-button grid-Button">Delete</button>
+          </ng-template>
+        </kendo-grid-column>  
+      </kendo-grid>
+    </div>
+   </div> 
+
+</div> 
+
+
+

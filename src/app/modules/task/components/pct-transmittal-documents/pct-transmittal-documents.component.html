@@ -1,0 +1,179 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">Documents Progress Table</h6>    
+</div>
+<div class="modal-body" style="font-size:12px">
+  <div class="row">  
+
+    <div class="col-md-3">
+        <div>
+            <label class="label"><span style="color:red">*</span>Project</label>
+        </div>
+        <div>
+            <kendo-combobox
+            #projectList
+            style="width:100%"
+            [data]="projects"
+            [(ngModel)] ="viewModel.project"
+            [filterable]="true"
+            textField="title"
+            valueField="id"
+            (valueChange)="projectSelectionChange($event)"></kendo-combobox> 
+        </div>              
+    </div>
+    <div class="col-md-3">
+        <div>
+            <label class="label"><span style="color:red">*</span>Custommer</label>
+        </div>
+        <div>
+            <kendo-combobox
+            style="width:100%"
+            [data]="customers"
+            [(ngModel)] ="viewModel.customer"
+            textField="title"
+            valueField="id"></kendo-combobox>  
+        </div>              
+    </div>
+    <div class="col-md-3">
+      <div>
+        <label class="label"> Plan Date</label>
+      </div>
+      <div>
+        <mat-form-field>
+          <input  matInput [matDatepicker]="planDate"  [(ngModel)] ="viewModel.planDate" >
+           <mat-datepicker-toggle matSuffix [for]="planDate"></mat-datepicker-toggle>
+           <mat-datepicker #planDate></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <div class="col-md-2">
+        <div>
+            <label><br></label>
+        </div>
+        <div>
+            <button class="btn btn-success" (click)="filter()">Filter</button>                
+        </div>              
+    </div>
+</div>
+
+   <div class="content" style="font-size:12px"> 
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-12">  
+      <kendo-grid #grid
+          [data]="gridView"  
+          [rowClass]="rowCallback"
+          [scrollable]="'virtual'"  
+          [skip]="skip"
+          [pageSize]="pageSize"
+          [rowHeight]="36"
+          [height]="600"
+          (pageChange)="pageChange($event)"
+          [navigable]="true"
+          [selectable]="{
+            checkboxOnly: false,
+            mode : 'single'
+           }"   
+          (dataStateChange)="dataStateChange($event)">        
+        <ng-template kendoGridToolbarTemplate position="top">
+            <button type="button" icon="file-excel"  class="k-button grid-Button" (click)="saveExcell(excelexport)">To Excel</button>
+            <div class="rose-refresh-grid"> <i title="Refresh" (click)="getTransmittals()" class="fa fa-refresh fa-fw"></i> </div>
+        </ng-template>      
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="150" field="wbsCode"  title="WBS Code"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}"  [width]="200" field="docNo" title="Doc No"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="350" field="docTitle" title="Doc Title"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="120" field="firstIssueDate" title="First Issue Date">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{ dataItem.firstIssueDate | date}}
+            </span>
+        </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="120" field="secondIssueDate" title="Second Issue Date">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{ dataItem.secondIssueDate | date}}
+            </span>
+        </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="120" field="thirdIssueDate" title="Third Issue Date">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{ dataItem.thirdIssueDate | date}}
+            </span>
+        </ng-template>
+        </kendo-grid-column>        
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="80" field="docClass" title="Class"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="80" field="weight" title="Weight">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{roundWeight(dataItem.weight)}}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="200" field="discipline" title="Discipline"></kendo-grid-column> 
+       
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="100" field="planPct" title="Plan PCT">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{roundPct(dataItem.planPct)}}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="100" field="pct" title="Actual PCT">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{roundPct(dataItem.pct)}}
+            </span>
+          </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="200" field="lastTransmittal.transmittalNo" title="Transmittal No"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="60" field="lastTransmittal.revision" title="Rev"></kendo-grid-column>        
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="120" field="lastTransmittal.transmittalDate" title="Transmittal Date">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{ dataItem.lastTransmittal != null ? (dataItem.lastTransmittal.transmittalDate | date) : null}}
+            </span>
+        </ng-template>
+        </kendo-grid-column> 
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="120" field="lastTransmittal.docStatusTitle" title="Issue Purpose"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="200" field="lastComment.transmittalNo" title="Comment No"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="60" field="lastComment.revision" title="Rev"></kendo-grid-column>   
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="120" field="lastComment.docStatusTitle" title="Comment Status"></kendo-grid-column>     
+        <kendo-grid-column  headerClass="grid-header" [class]="{'codeColumn': true}" [width]="120" field="lastComment.transmittalDate" title="Comment Date">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <span>
+                    {{ dataItem.lastComment != null ? (dataItem.lastComment.transmittalDate | date) : null}}
+            </span>
+        </ng-template>
+        </kendo-grid-column> 
+      </kendo-grid>
+     </div>
+    </div>
+  </div>
+</div>
+
+
+<kendo-excelexport [data]="excellData" [collapsible]="true" fileName="DocumentsProgressList.xlsx" #excelexport>
+        <kendo-excelexport-column  [width]="20" field="level"  title="Lev"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="200" field="wbsCode"  title="WBS Code"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="200" field="docNo" title="Doc No"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="30" field="docClass" title="Class"></kendo-excelexport-column>
+        <kendo-excelexport-column  field="docTitle" title="Doc Title"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="200" field="discipline" title="Discipline"></kendo-excelexport-column> 
+        <kendo-excelexport-column  [width]="80" field="weight" title="Weight"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="80" field="planPct" title="Plan PCT"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="80" field="pct" title="Actual PCT"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="100" field="firstIssueDate" title="First Issue Date"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="100" field="secondIssueDate" title="Second Issue Date"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="100" field="thirdIssueDate" title="Third Issue Date"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="100" field="docStatusTitle" title="Issue Purpose"></kendo-excelexport-column>        
+        <kendo-excelexport-column  [width]="50" field="revision" title="Rev"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="200" field="transmittalNo" title="Transmittal No"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="200" field="transmittalDate" title="Transmittal Date"></kendo-excelexport-column>    
+        <kendo-excelexport-column  [width]="200" field="commentNo" title="Comment No"></kendo-excelexport-column>
+        <kendo-excelexport-column  [width]="50" field="commentRev" title="Comment Rev"></kendo-excelexport-column>        
+        <kendo-excelexport-column  [width]="100" field="commentStatus" title="Comment Status"></kendo-excelexport-column>    
+        <kendo-excelexport-column  [width]="200" field="commentDate" title="Comment Date"></kendo-excelexport-column>         
+</kendo-excelexport>

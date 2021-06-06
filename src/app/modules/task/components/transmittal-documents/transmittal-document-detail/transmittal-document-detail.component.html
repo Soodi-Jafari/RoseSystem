@@ -1,0 +1,92 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div class="modal-header" style="padding : 10px">
+  <h6 class="modal-title" id="modal-basic-title">Transmittal Documents</h6>
+</div>
+<div class="modal-body" style="font-size:12px">
+  <div class="row" style="padding-top: 10px;" *ngIf="viewModel.transmittalNo"> 
+    <div class="col-md-4"> 
+     <span style="font-weight:bold"> Transmittal No :  </span> {{viewModel.transmittalNo}}
+    </div>
+     <div class="col-md-4"> 
+       <span style="font-weight:bold">  Transmittal Type :  </span> {{getTransmittalType(viewModel.transmittalType)}}
+     </div>
+     <div class="col-md-4"> 
+       <span style="font-weight:bold">  Client :  </span> {{viewModel.customer?.title}}
+     </div>
+  </div>
+  
+ <div class="row" style="padding-top: 20px;" *ngIf="isNewDocumentMode == false">
+    <div class="col-md-12">
+        <div class="content" style="font-size:12px"> 
+            <kendo-grid #grid
+                [data]="tranDocGridView"   
+                [pageSize]="state.take"
+                [skip]="state.skip"         
+                [kendoGridSelectBy]="'id'"
+                [selectedKeys]="tranDocSelectionRows" 
+                [pageable]="{
+                  buttonCount: 10,
+                  info: true,
+                  type: 'type',
+                  pageSizes: true,
+                  previousNext: true
+                }"
+                [selectable]="{
+                  checkboxOnly: false,
+                  mode : 'single'
+              }"  
+                [sort]="state.sort"
+                [sortable]="true"
+                [scrollable]="'none'"
+                [filter]="state.filter"
+                [filterable]="true"  
+                (dataStateChange)="transDocdataStateChange($event)">        
+              <ng-template kendoGridToolbarTemplate position="top">
+                  <button *ngxPermissionsOnly="['newTransmittalDoc']" (click)="newDocument()" class="k-button grid-Button">Add Document</button>              
+                  <button *ngxPermissionsOnly="['deleteTransmittalDoc']" (click)="delete()" class="k-button grid-Button">Delete Document</button>
+                  <button  (click)="printPreview(dataItem)" class="k-button grid-Button">Print Preview</button>
+              </ng-template>
+              <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+              <kendo-grid-column  headerClass="grid-header" [width]="170" field="documentNo" title="Document No."></kendo-grid-column>     
+              <kendo-grid-column  headerClass="grid-header"  field="documentTitle" title="Document Title"></kendo-grid-column>    
+              <kendo-grid-column  headerClass="grid-header" [width]="170" field="disciplineName" title="Discipline"></kendo-grid-column>   
+              <kendo-grid-column  headerClass="grid-header" [width]="80" field="revision" title="Rev"></kendo-grid-column> 
+              <kendo-grid-column  headerClass="grid-header" [width]="150" field="purposeOfIssue.title" title="Purpose Of Issue"></kendo-grid-column>         
+              <kendo-grid-column  headerClass="grid-header" [width]="80" field="sheetNo" title="Sheet No."></kendo-grid-column> 
+              <kendo-grid-column  headerClass="grid-header" [width]="80" field="pageType" title="Page Type">
+                <ng-template kendoGridCellTemplate let-dataItem>       
+                    <span>
+                      {{getTransmittalPageType(dataItem.pageType)}}
+                    </span>
+                </ng-template>          
+               </kendo-grid-column>   
+               <kendo-grid-column  [width]="80" headerClass="grid-header">
+                <ng-template kendoGridCellTemplate let-dataItem>       
+                    <button (click)="ShowFiles(dataItem)" class="k-button">View Files</button>
+                </ng-template>
+               </kendo-grid-column>             
+            </kendo-grid>
+          </div> 
+     </div>
+  </div>
+
+  <div *ngIf="isNewDocumentMode == true  && isIssueForClient == true" style="padding-top: 20px;"> 
+      <mat-list>
+          <mat-list-item>Approved Documents List</mat-list-item>
+          <mat-divider>       
+          </mat-divider> 
+        </mat-list> 
+   <div class="row" style="padding-top: 10px;" >
+      <div class="col-md-12">
+        <add-issue-document [transmittal]="viewModel" (documentsAddChanged)="onDocumentsAdded($event)"></add-issue-document> 
+      </div>
+   </div>
+ </div>
+
+ <div *ngIf="isNewDocumentMode == true && isIssueForClient == false" style="padding-top: 10px;">  
+  <div class="col-md-12">
+    <add-comment-document [transmittal]="viewModel" (documentsAddChanged)="onDocumentsAdded($event)"></add-comment-document> 
+  </div>
+  </div>
+</div>
+

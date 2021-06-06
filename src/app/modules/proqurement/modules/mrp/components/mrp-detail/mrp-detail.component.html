@@ -1,0 +1,128 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+  <h5 class="modal-title" id="modal-basic-title">MRP</h5>
+  <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+  <div class="modal-body" style="font-size:12px">
+    <div class="row" style="padding-top: 10px;">
+      <div class="col-md-4" *ngIf="!isEditMode" >             
+        <div>
+          <label class="label"><span style="color:red">*</span> MR documents</label>
+        </div>
+        <div>
+        <kendo-combobox
+          #docList
+          style="width:100%"
+          [data]="documents"
+          [(ngModel)] ="viewModel.mrDocument"
+          [filterable]="true"
+          textField="mrShortName"
+          valueField="id"
+          (valueChange)="selectionChange($event)"></kendo-combobox>       
+        </div>         
+      </div>
+      <div class="col-md-4" *ngIf="isEditMode">        
+        <div>
+            <label class="label"><span style="color:red">*</span> MRP No.</label>
+        </div>
+        <div>
+            <input disabled type="text" [(ngModel)] ="viewModel.mrpNo" class="rose-form-control">
+        </div>
+    </div>
+      <div class="col-md-4" >
+          <div>
+              <label class="label"><span style="color:red">*</span> Title</label>
+          </div>
+          <div> 
+              <input disabled type="text" [(ngModel)] ="viewModel.title" class="rose-form-control">
+          </div>
+      </div>     
+    <div class="col-md-4">              
+      <div>
+        <label class="label"> PlanTBEDate</label>
+      </div>
+      <div>
+       <mat-form-field>
+        <input matInput [matDatepicker]="planTBEPicker"  [(ngModel)] ="viewModel.planTBEDate" >
+        <mat-datepicker-toggle matSuffix [for]="planTBEPicker"></mat-datepicker-toggle>
+        <mat-datepicker #planTBEPicker></mat-datepicker>
+      </mat-form-field>
+      </div>
+      </div>
+    </div>
+    <div class="row" style="padding-top: 10px;">
+
+        <div class="col-md-4">              
+          <div>
+            <label class="label"> PlanCBEDate</label>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput [matDatepicker]="planCBEPicker"  [(ngModel)] ="viewModel.planCBEDate" >
+              <mat-datepicker-toggle matSuffix [for]="planCBEPicker"></mat-datepicker-toggle>
+              <mat-datepicker #planCBEPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+       </div>
+        <div class="col-md-4">
+            <div>
+               <label class="label"> PlanInquiryStart</label>
+            </div>
+            <div>                
+                <mat-form-field>
+                  <input matInput [matDatepicker]="planInStartPicker"  [(ngModel)] ="viewModel.planInquiryStart" >
+                  <mat-datepicker-toggle matSuffix [for]="planInStartPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #planInStartPicker></mat-datepicker>
+                </mat-form-field>
+            </div>               
+        </div>
+        <div class="col-md-4">
+          <div>
+             <label class="label"> PlanInquiryEnd</label>
+          </div>
+          <div>
+              <mat-form-field>
+                <input matInput [matDatepicker]="planInEndPicker"  [(ngModel)] ="viewModel.planInquiryEnd" >
+                <mat-datepicker-toggle matSuffix [for]="planInEndPicker"></mat-datepicker-toggle>
+                <mat-datepicker #planInEndPicker></mat-datepicker>
+              </mat-form-field>
+          </div>               
+         </div>
+    </div>
+   
+       <div class="row"  style="padding-top: 10px;">
+          <div class="col-md-12">              
+              <div>
+                  <label class="label"> Description </label>
+              </div>
+              <div>
+                  <input type="text" [(ngModel)] ="viewModel.description" class="rose-form-control">
+              </div>          
+          </div>           
+        </div>       
+        <div class="row"  style="padding-top: 10px;">
+          <div class="col-md-12">
+        <mat-accordion  *ngIf="viewModel.id">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Procurement Item
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+        
+          <app-mrpitems [mrp]="viewModel"></app-mrpitems>
+          </mat-expansion-panel>
+        
+        </mat-accordion>
+       </div>
+    </div>
+  </div>
+
+<div class="modal-footer">
+    <button *ngxPermissionsOnly="['saveMrpItem']" class="btn btn-success" (click)="save()">Save</button>
+    <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+</div>
+

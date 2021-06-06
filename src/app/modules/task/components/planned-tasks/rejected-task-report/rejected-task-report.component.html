@@ -1,0 +1,69 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>Rejected Tasks</h6>
+</div>
+<div class="content" style="font-size:12px"> 
+      <kendo-grid #grid
+          [data]="gridView"   
+          [sort]="state.sort"
+          [sortable]="true"
+          [scrollable]="'none'"
+          [kendoGridSelectBy]="'id'"
+          [selectedKeys]="selectionRows" 
+          [selectable]="{
+            checkboxOnly: false,
+            mode : 'single'
+           }"  
+          [filter]="state.filter"
+          [filterable]="true"  
+          [groupable]="true"
+          [group]="state.group"
+        (dataStateChange)="dataStateChange($event)">        
+        
+        <ng-template kendoGridToolbarTemplate position="top">          
+            <div class="rose-refresh-grid"> <i title="Refresh" (click)="getPlannedTasks()" class="fa fa-refresh fa-fw"></i> </div>
+        </ng-template>
+        <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+<!--         <kendo-grid-column  [width]="60" headerClass="grid-header">
+              <ng-template kendoGridCellTemplate let-dataItem>       
+                  <button (click)="editRow(dataItem)" class="k-button">View</button>
+              </ng-template>
+        </kendo-grid-column>   -->
+        <kendo-grid-column  headerClass="grid-header" [width]="170" field="documentNo" title="Document No">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+            <a  (click)="editRow(dataItem)">{{dataItem.documentNo}}</a>
+          </ng-template> 
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" [width]="120" field="disciplineName" title="Discipline" [hidden]="hiddenDiscColumn">
+          <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="state.group"
+            let-aggregates="aggregates">
+            <p style="color:darkblue">  {{value}} - ({{aggregates["disciplineName"].count}})</p>
+          </ng-template>
+        </kendo-grid-column>       
+        <kendo-grid-column [filterable]="false" headerClass="grid-header" width="50" field="revision" title="Rev">
+        </kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header" field="documentTitle" title="Document Title"></kendo-grid-column>
+        <kendo-grid-column  headerClass="grid-header"  field="comment" title="Comment"></kendo-grid-column>        
+        <kendo-grid-column headerClass="grid-header" [width]="100"  filter="date" format="MM/dd/yyyy" field="creationDate" title="Creation Date">
+            <ng-template kendoGridCellTemplate let-dataItem>       
+                <span>
+                        {{dataItem.creationDate | date}}
+                </span>
+            </ng-template>
+        </kendo-grid-column>   
+        <kendo-grid-column headerClass="grid-header" [width]="120"  field="flowState" title="State" [hidden]="hiddenStateColumn">
+          <ng-template kendoGridCellTemplate let-dataItem>       
+              <span>
+                      {{getStateTitle(dataItem.flowState)}}
+              </span>
+          </ng-template>         
+          <ng-template kendoGridGroupHeaderTemplate let-value="value"  let-group="state.group"
+             let-aggregates="aggregates">
+            <p style="color:darkblue"> {{getStateTitle(value)}} - ({{aggregates["flowState"].count}})</p>
+          </ng-template>
+         </kendo-grid-column>
+    
+      
+
+      </kendo-grid>
+      </div>

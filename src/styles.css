@@ -1,0 +1,120 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.rose-form-control {
+    display: block;
+    width: 100%;
+    /* height: calc(2.25rem + 2px); */
+    padding: .375rem .75rem;
+ /*    font-size: 1rem; */
+    font-weight: 400;
+    line-height: .05;  /*for label text*/
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.textarea-form-control {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-weight: 400;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.grid-header {
+  background-color :lavender;
+}
+.grid-Button {
+  background :beige;
+}
+
+.red { 
+  color: red;
+ }
+.green  {
+   color: green; 
+  }
+
+  .span-button {
+    padding: 5px; 
+ }
+ 
+  .k-grid th, .k-grid td {
+    padding: 3px 4px !important;
+    border-style: solid;
+    border-color: inherit;
+    outline: 0;
+    font-weight: inherit;
+  
+    overflow: hidden;
+/*     white-space:nowrap; */
+/*  display: inline-block; */  /* to do fo ellipsis */
+/* white-space: nowrap; */
+/*  min-width: 50px;   */
+    text-overflow: ellipsis;
+}
+
+.mat-form-field-infix {
+  display: block;
+  position: relative;
+  flex: auto;
+  min-width: 0;
+  width: 100% !important;
+}
+
+.mat-tab-label-active {
+  color: #3f51b5 !important;
+  font-weight: bold !important;
+} 
+
+.pages-wrap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  background: #fff;
+}
+
+.pages-body {
+  -ms-flex: 1;
+  flex: 1;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  background: #fafafa;
+  overflow-x: hidden;
+}
+
+.pages-body .pages-content {
+  padding: 30px 10px 10px 30px;
+  -ms-flex: 1;
+  flex: 1;
+  background: #fafafa;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: #26253c;
+  overflow-x: hidden;
+}
+.rose-refresh-grid
+{
+  margin-right: 10px;
+  float: right;
+  cursor: pointer
+}

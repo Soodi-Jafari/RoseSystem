@@ -1,0 +1,120 @@
+<app-loading *ngIf="isLoading"></app-loading>
+ <div class="modal-header" style="padding : 10px">
+    <h5 class="modal-title" id="modal-basic-title">Vendor</h5>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+<form  name="form" #f="ngForm" (ngSubmit)="f.form.valid && save()" novalidate>
+    <div class="modal-body" style="font-size:12px">
+      <div class="row" style="padding-top: 10px;">
+        <div class="col-md-4">
+            <div>
+                <label class="label"><span style="color:red">*</span> Name</label>
+            </div>
+            <div> 
+                <input type="text" [(ngModel)] ="viewModel.name"  name="name" class="rose-form-control"
+                #name="ngModel"  [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required >
+            </div>
+        </div>
+        <div class="col-md-4">
+          
+            <div>
+                <label class="label"> ShortName</label>
+            </div>
+            <div>
+                <input type="text" name ="shortName" [(ngModel)] ="viewModel.shortName" class="rose-form-control">
+            </div>
+        </div>
+        <div class="col-md-4">
+          
+            <div>
+                <label class="label"> VendorManager</label>
+            </div>
+            <div>
+                <input type="text" name ="vendorManager"  [(ngModel)] ="viewModel.vendorManager" class="rose-form-control">
+            </div>
+          </div>
+      </div>
+      <div class="row" style="padding-top: 10px;">
+          
+          <div class="col-md-4">            
+              <div>
+                <label class="label"> Email</label>
+              </div>
+            <div>
+                <input type="text"  name ="email" [(ngModel)] ="viewModel.email" class="rose-form-control">
+            </div>
+        </div>
+            <div class="col-md-4">              
+                <div>
+                    <label class="label"> Tel</label>
+                  </div>
+                <div>
+                    <input type="text" name ="tel" [(ngModel)] ="viewModel.tel" class="rose-form-control">
+                </div>
+            </div>
+            <div class="col-md-4">
+                  <div>
+                      <label class="label"> Fax</label>
+                 </div>
+                 <div>
+                     <input type="text" name ="fax" [(ngModel)] ="viewModel.fax" class="rose-form-control">
+                 </div>               
+            </div>
+          </div>
+       
+          <div class="row"  style="padding-top: 10px;">
+              <div class="col-md-4">                
+                  <div>
+                        <label class="label"> Website </label>
+                   </div>
+                   <div>
+                       <input type="text" name ="webSite" [(ngModel)] ="viewModel.webSite" class="rose-form-control">
+                   </div>           
+              </div>
+              <div class="col-md-4">
+                  <div>
+                       <label class="label"> ContactName </label>
+                   </div>
+                   <div>
+                       <input type="text" name ="contactName" [(ngModel)] ="viewModel.contactName" class="rose-form-control">
+                   </div>           
+              </div>
+         </div>
+         <div class="row"  style="padding-top: 10px;">
+            <div class="col-md-12">              
+                <div>
+                    <label class="label"> Address </label>
+                </div>
+                <div>
+                    <input type="text" name ="address" [(ngModel)] ="viewModel.address" class="rose-form-control">
+                </div>          
+            </div>           
+          </div>
+          <div class="row"  style="padding-top: 10px;">
+              <div class="col-md-12">               
+                <div>
+                   <label class="label"> Procurement Items </label>
+                </div>
+                <div>
+                  <kendo-multiselect 
+                  #list
+                  name ="item"
+                  [data]="items"
+                  [filterable]="true"
+                  textField="title"
+                  valueField="id"
+                  [(ngModel)]="viewModel.vendorItems"></kendo-multiselect>
+                </div>
+              </div>
+            </div>
+    </div>
+
+  <div class="modal-footer">
+      <button type="submit" *ngxPermissionsOnly="['saveVendor']" class="btn btn-success">Save</button>
+      <button mat-stroked-button (click)="closeDialog()">Cancel</button>
+  </div>
+</form>
+

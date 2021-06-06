@@ -1,0 +1,196 @@
+<app-loading *ngIf="isLoading"></app-loading>
+<div>
+  <h6>MRP: {{mrp?.mrpNo}} /{{mrp?.title}}</h6>
+ </div>
+
+  <div class="content" style="font-size:12px">
+   
+    <div class="row">       
+        <div class="col-md-12">
+            <div class="content">  
+                <kendo-grid
+                    [data]="gridViewVendor"
+                    [rowClass]="rowCallback"
+                    [pageSize]="state.take"
+                    [skip]="state.skip"
+                    [sort]="state.sort"
+                    [sortable]="true"
+                    [kendoGridSelectBy]="'Id'"
+                    [selectedKeys]="selectionRows" 
+                    [pageable]="{
+                      buttonCount: 5,
+                      info: true,
+                      type: 'type',
+                      pageSizes: true,
+                      previousNext: true
+                    }"
+                    [scrollable]="'none'"
+                    [selectable]="{
+                      checkboxOnly: false,
+                      mode : 'single'
+                  }"                       
+                  (dataStateChange)="dataVendorStateChange($event)"
+                  (selectionChange)="selectionChange($event)"
+                  >
+                  <ng-template kendoGridToolbarTemplate position="top">
+                     Vendors
+                  </ng-template>
+                  <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+                  <kendo-grid-column headerClass="grid-header"  field="Vendor" title="Vendor"></kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="approved" title="Approved">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                          <span>
+                                  {{dataItem.IsQualified == true ? "Yes" : ''}}
+                          </span>
+                      </ng-template>
+                  </kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="rejected" title="Rejected">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                          <span>
+                                  {{dataItem.IsQualified == false ? "Yes" : ''}}
+                          </span>
+                      </ng-template>
+                  </kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="IsDecline" title="Decline">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                          <span>
+                                  {{dataItem.IsDecline == true ? "Yes" : ''}}
+                          </span>
+                      </ng-template>
+                  </kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="Situation" title="Situation">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                          <span>
+                              {{dataItem.Direction ? "Commany" : dataItem.Direction == false ? "Vendor" : ""}}
+                          </span>
+                      </ng-template>
+                  </kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="CorespondenceType" title="CorrespondenceType">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                          <span>
+                                  {{getCorespondenceTitle(dataItem.CorespondenceType)}}
+                          </span>
+                      </ng-template>
+                     </kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="direction" title="Direction">
+                    <ng-template kendoGridCellTemplate let-dataItem>       
+                       <span>
+                            {{dataItem.Direction ? "Vendor --> Commany" : dataItem.Direction == false ? "Company --> Vendor": ""}}
+                        </span>
+                      </ng-template>
+                 </kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="LetterNo" title="LetterNo"></kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="LetterDate" title="LetterDate">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                          <span>
+                                  {{dataItem.LetterDate | date}}
+                          </span>
+                      </ng-template>
+                  </kendo-grid-column>
+
+                </kendo-grid>
+              </div>
+         </div>
+    </div>
+    <div><hr></div>
+    <div>
+      Bidding Correspoundences
+    </div>
+    <div class="row" style="padding-top: 10px;">   
+        <div class="col-md-12">
+            <div class="content">  
+                <kendo-grid
+                    [data]="gridView"                
+                    [pageSize]="state.take"
+                    [skip]="state.skip"
+                    [sort]="state.sort"
+                    [sortable]="true"
+                    [filter]="state.filter"
+                    [filterable]="true"  
+                    [kendoGridSelectBy]="'id'"
+                    [selectedKeys]="selectionRows" 
+                    [pageable]="{
+                      buttonCount: 5,
+                      info: true,
+                      type: 'type',
+                      pageSizes: true,
+                      previousNext: true
+                    }"
+                    [scrollable]="'none'"
+                    [selectable]="{
+                      checkboxOnly: false,
+                      mode : 'single'
+                  }"        
+                                 
+                  (dataStateChange)="dataStateChange($event)">             
+                  <ng-template kendoGridToolbarTemplate position="top">
+                      <button *ngxPermissionsOnly="['newMrpVendorFlow']" (click)="new()" class="k-button grid-Button">Add Bidding</button>
+                      <button *ngxPermissionsOnly="['editMrpVendorFlow']" (click)="edit()" class="k-button grid-Button">Attach Files</button>
+                      <button *ngxPermissionsOnly="['deleteMrpVendorFlow']" (click)="delete()" class="k-button grid-Button">Delete Bidding</button>
+                      <button type="button" *ngxPermissionsOnly="['viewMrpVendorFlow']" class="k-button grid-Button" (click)="excelexport.save()">Export To Excel</button>
+                 
+                    </ng-template>
+                  <kendo-grid-checkbox-column headerClass="grid-header" [width]="30"></kendo-grid-checkbox-column>
+                  <kendo-grid-column  [width]="80" *ngxPermissionsOnly="['viewMrpVendorFlow']"  headerClass="grid-header">
+                        <ng-template kendoGridCellTemplate let-dataItem>       
+                            <button (click)="editRow(dataItem)" class="k-button">View</button>
+                   </ng-template>
+                  </kendo-grid-column>  
+                  <kendo-grid-column  headerClass="grid-header"field="subject" title="Subject"></kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="letterNo" title="Letter No"></kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="letterDate" title="Letter Date">
+                      <ng-template kendoGridCellTemplate let-dataItem>       
+                          <span>
+                                  {{dataItem.letterDate | date}}
+                          </span>
+                      </ng-template>
+                  </kendo-grid-column>
+                <!--   <kendo-grid-column field="vendorFlowStatus" title="VendorFlowStatus"></kendo-grid-column> -->
+                  <kendo-grid-column headerClass="grid-header" field="correspondenceType" title="Correspondence Type">
+                  <ng-template kendoGridCellTemplate let-dataItem>       
+                      <span>
+                              {{getCorespondenceTitle(dataItem.correspondenceType)}}
+                      </span>
+                  </ng-template>
+                 </kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="direction" title="Direction">
+                         <ng-template kendoGridCellTemplate let-dataItem>       
+                            <span>
+                                    {{dataItem.direction ? "Vendor --> Commany" : "Company --> Vendor"}}
+                            </span>
+                        </ng-template>
+                  </kendo-grid-column>
+                  <kendo-grid-column headerClass="grid-header" field="currentState" title="Current State">
+                    <ng-template kendoGridCellTemplate let-dataItem>       
+                        <span>
+                                {{getStateTitle(dataItem.currentState)}}
+                        </span>
+                    </ng-template>
+                   </kendo-grid-column>
+                </kendo-grid>
+              </div>
+         </div>
+        </div>
+  
+  </div>
+
+
+ <kendo-excelexport [data]="data" [group]="group"  [collapsible]="true" fileName="VendorBidding.xlsx" #excelexport>
+     <kendo-excelexport-column field="subject" title="Subject" [width]="200">
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="letterNo" title="LetterNo" [width]="150">
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="letterDate" title="LetterDate" [width]="150">         
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="correspondenceType" title="CorrespondenceType" [width]="100">            
+    </kendo-excelexport-column>
+    <kendo-excelexport-column field="direction" title="direction" [width]="200">            
+        </kendo-excelexport-column>
+    <kendo-excelexport-column field="vendor.title" width="120" [hidden]="true">
+            <ng-template kendoExcelExportGroupHeaderTemplate  let-value="value">
+               Vendor: {{value}}
+            </ng-template>
+    </kendo-excelexport-column>
+</kendo-excelexport>
+ 
+
